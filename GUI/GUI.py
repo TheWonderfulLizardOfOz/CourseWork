@@ -41,9 +41,9 @@ class MainView(tk.Frame):
         itemsAndSpellsPage = ItemsAndSpellsPage(self)
         addItemsAndSpellsPage = AddItemsAndSpellsPage(self)
 
-        buttonframe = tk.Frame(self)
+        buttonFrame = tk.Frame(self)
         container = tk.Frame(self)
-        buttonframe.pack(side = "top", fill = "x", expand = False)
+        buttonFrame.pack(side = "top", fill = "x", expand = False)
         container.pack(side = "top", fill = "both", expand = True)
 
         createCharacterPage.place(in_ = container, x = 0, y = 9, relwidth = 1, relheight = 1)
@@ -53,12 +53,12 @@ class MainView(tk.Frame):
         itemsAndSpellsPage.place(in_ = container, x = 0, y = 9, relwidth = 1, relheight = 1)
         addItemsAndSpellsPage.place(in_ = container, x = 0, y = 9, relwidth = 1, relheight = 1)
 
-        buttonCreateCharacterPage = tk.Button(buttonframe, text = "Create character", command = createCharacterPage.lift)
-        buttonBattlePage = tk.Button(buttonframe, text = "Battle", command = battlePage.lift)
-        buttonDicePage = tk.Button(buttonframe, text = "Roll Dice", command = dicePage.lift)
-        buttonCharacterSheetPage = tk.Button(buttonframe, text = "View Characters", command = characterSheetPage.lift)
-        buttonItemsAndSpellsPage = tk.Button(buttonframe, text = "Items/Spells", command = itemsAndSpellsPage.lift)
-        buttonAddItemsAndSpellsPage = tk.Button(buttonframe, text = "Add items/spells", command = addItemsAndSpellsPage.lift)
+        buttonCreateCharacterPage = tk.Button(buttonFrame, text = "Create character", command = createCharacterPage.lift)
+        buttonBattlePage = tk.Button(buttonFrame, text = "Battle", command = battlePage.lift)
+        buttonDicePage = tk.Button(buttonFrame, text = "Roll Dice", command = dicePage.lift)
+        buttonCharacterSheetPage = tk.Button(buttonFrame, text = "View Characters", command = characterSheetPage.lift)
+        buttonItemsAndSpellsPage = tk.Button(buttonFrame, text = "Items/Spells", command = itemsAndSpellsPage.lift)
+        buttonAddItemsAndSpellsPage = tk.Button(buttonFrame, text = "Add items/spells", command = addItemsAndSpellsPage.lift)
 
         buttonCreateCharacterPage.pack(side = "left")
         buttonBattlePage.pack(side = "left")
