@@ -1,6 +1,7 @@
 import tkinter as tk
 from PIL import Image, ImageTk
 import os.path
+import time
 
 class StartPage(tk.Frame):
     def __init__(self, *args, **kwargs):
@@ -27,10 +28,12 @@ class StartPage(tk.Frame):
             self.setClick(False)
 
     def findIncreaseInProportions(self, newWidth, newHeight):
-        if int(newWidth/16) > int(newHeight/9):
-            newProportion = int(newHeight/9)
+        widthSF = int(newWidth/16)
+        heightSF = int(newHeight/9)
+        if widthSF > heightSF:
+            newProportion = heightSF
         else:
-            newProportion = int(newWidth/16)
+            newProportion = widthSF
         newWidth = 16*newProportion
         newHeight = 9*newProportion
         return (newWidth, newHeight)
