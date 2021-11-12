@@ -1,7 +1,6 @@
 import tkinter as tk
 from PIL import Image, ImageTk
 import os.path
-import time
 
 class StartPage(tk.Frame):
     def __init__(self, *args, **kwargs):
@@ -11,9 +10,14 @@ class StartPage(tk.Frame):
         self.image = Image.open(os.path.dirname(__file__) + "/../Images/SolidImageLogo.png")
 
         self.backgroundImage = ImageTk.PhotoImage(self.image)
+        self.background = tk.Label(root, image = self.backgroundImage)
+        self.startButton = tk.Button(root, text = "Start", command = self.start)
+        self.instructionsButton = tk.Button(root, text = "Instructions", command = self.instructions)
 
-        self.background = tk.Label(self, image = self.backgroundImage)
-        self.background.place(x = 0, y = 0, relwidth = 1, relheight = 1)
+        self.background.place(relx = 0, rely = 0, relwidth = 1, relheight = 1)
+        self.startButton.place(relx = 0.25, rely = 0.75, relwidth = 0.15, relheight = 0.05)
+        self.instructionsButton.place(relx = 0.60, rely = 0.75, relwidth = 0.15, relheight = 0.05)
+
         root.bind("<Enter>", self.resizeImage)
         root.bind("<Leave>", self.resizeImage)
         root.bind("<Configure>", lambda e: self.setClick(True))
@@ -25,6 +29,7 @@ class StartPage(tk.Frame):
             (newWidth, newHeight) = self.findIncreaseInProportions(newWidth, newHeight)
             self.resizedImage = ImageTk.PhotoImage(self.image.resize((newWidth, newHeight), Image.ANTIALIAS))
             self.background.configure(image = self.resizedImage)
+
             self.setClick(False)
 
     def findIncreaseInProportions(self, newWidth, newHeight):
@@ -41,8 +46,15 @@ class StartPage(tk.Frame):
     def setClick(self, value):
         self.clicked = value
 
+    def start(self):
+        pass
+
+    def instructions(self):
+        pass
+
 root = tk.Tk()
 root.geometry("800x450")
+root.minsize(450, 300)
 main = StartPage(root)
 main.pack(side="top", fill="both", expand=True)
 root.mainloop()
