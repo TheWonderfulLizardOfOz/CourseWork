@@ -5,22 +5,24 @@ import os.path
 class StartPage(tk.Frame):
     def __init__(self, *args, **kwargs):
         tk.Frame.__init__(self, *args, **kwargs)
+        self.startButtonClicked = False
         self.clicked = False
+        self.root = args[0]
 
         self.image = Image.open(os.path.dirname(__file__) + "/../Images/SolidImageLogo.png")
 
         self.backgroundImage = ImageTk.PhotoImage(self.image)
-        self.background = tk.Label(root, image = self.backgroundImage)
-        self.startButton = tk.Button(root, text = "Start", command = self.start)
-        self.instructionsButton = tk.Button(root, text = "Instructions", command = self.instructions)
+        self.background = tk.Label(self.root, image = self.backgroundImage)
+        self.startButton = tk.Button(self.root, text = "Start", command = self.start)
+        self.instructionsButton = tk.Button(self.root, text = "Instructions", command = self.instructions)
 
         self.background.place(relx = 0, rely = 0, relwidth = 1, relheight = 1)
         self.startButton.place(relx = 0.25, rely = 0.75, relwidth = 0.15, relheight = 0.05)
         self.instructionsButton.place(relx = 0.60, rely = 0.75, relwidth = 0.15, relheight = 0.05)
 
-        root.bind("<Enter>", self.resizeImage)
-        root.bind("<Leave>", self.resizeImage)
-        root.bind("<Configure>", lambda e: self.setClick(True))
+        self.root.bind("<Enter>", self.resizeImage)
+        self.root.bind("<Leave>", self.resizeImage)
+        self.root.bind("<Configure>", lambda e: self.setClick(True))
 
     def resizeImage(self, event):
         if self.clicked == True:
@@ -47,14 +49,8 @@ class StartPage(tk.Frame):
         self.clicked = value
 
     def start(self):
-        pass
+        self.startButtonClicked = True
+        self.root.destroy()
 
     def instructions(self):
         pass
-
-root = tk.Tk()
-root.geometry("800x450")
-root.minsize(450, 300)
-main = StartPage(root)
-main.pack(side="top", fill="both", expand=True)
-root.mainloop()

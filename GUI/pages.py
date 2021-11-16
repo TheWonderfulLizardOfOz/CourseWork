@@ -2,6 +2,7 @@ import tkinter as tk
 class Page(tk.Frame):
     def __init__(self, *args, **kwargs):
         tk.Frame.__init__(self, *args, **kwargs)
+        self.root = args[0]
 
     def show(self):
         self.lift()
@@ -68,9 +69,3 @@ class MainView(tk.Frame):
         buttonAddItemsAndSpellsPage.pack(side = "left")
 
         createCharacterPage.show()
-
-root = tk.Tk()
-main = MainView(root)
-main.pack(side = "top", fill = "both", expand = True)
-root.wm_geometry("1000x600")
-root.mainloop()
