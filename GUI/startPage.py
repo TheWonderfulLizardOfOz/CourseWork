@@ -53,4 +53,4 @@ class StartPage(tk.Frame):
         self.root.destroy()
 
     def instructions(self):
-        pass
+        self.instructionsPage = tk.Toplevel(self.root)
