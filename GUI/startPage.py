@@ -14,7 +14,7 @@ class StartPage(tk.Frame):
         self.backgroundImage = ImageTk.PhotoImage(self.image)
         self.background = tk.Label(self.root, image = self.backgroundImage)
         self.startButton = tk.Button(self.root, text = "Start", command = self.start)
-        self.instructionsButton = tk.Button(self.root, text = "Instructions", command = self.instructions)
+        self.instructionsButton = tk.Button(self.root, text = "Instructions", command = self.showInstructions)
 
         self.background.place(relx = 0, rely = 0, relwidth = 1, relheight = 1)
         self.startButton.place(relx = 0.25, rely = 0.75, relwidth = 0.15, relheight = 0.05)
@@ -52,5 +52,5 @@ class StartPage(tk.Frame):
         self.startButtonClicked = True
         self.root.destroy()
 
-    def instructions(self):
-        self.instructionsPage = tk.Toplevel(self.root)
+    def showInstructions(self):
+        self.instructionsWindow = tk.Toplevel(self.root)
