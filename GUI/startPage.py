@@ -5,9 +5,11 @@ import os.path
 class StartPage(tk.Frame):
     def __init__(self, *args, **kwargs):
         tk.Frame.__init__(self, *args, **kwargs)
+        self.root = args[0]
         self.startButtonClicked = False
         self.clicked = False
-        self.root = args[0]
+        self.instructionsWindow = Instructions()
+        self.instructionsWindow.withdraw()
 
         self.image = Image.open(os.path.dirname(__file__) + "/../Images/SolidImageLogo.png")
 
@@ -53,4 +55,9 @@ class StartPage(tk.Frame):
         self.root.destroy()
 
     def showInstructions(self):
-        self.instructionsWindow = tk.Toplevel(self.root)
+        self.instructionsWindow.destroy()
+        self.instructionsWindow = Instructions()
+
+class Instructions(tk.Toplevel):
+    def __init__(self):
+        tk.Toplevel.__init__(self)
