@@ -6,6 +6,7 @@ class StartPage(tk.Frame):
     def __init__(self, *args, **kwargs):
         tk.Frame.__init__(self, *args, **kwargs)
         self.root = args[0]
+        self.root.title("Start menu")
         self.startButtonClicked = False
         self.clicked = False
         self.instructionsWindow = Instructions()
@@ -61,6 +62,7 @@ class StartPage(tk.Frame):
 class Instructions(tk.Toplevel):
     def __init__(self):
         tk.Toplevel.__init__(self)
+        self.title("Instructions")
         self.textBox = tk.Text(self)
         self.scrollBar = tk.Scrollbar(self, command = self.textBox.yview)
         self.textBox.config(yscrollcommand = self.scrollBar.set, wrap = tk.WORD)
@@ -70,3 +72,4 @@ class Instructions(tk.Toplevel):
 
         text = "hello "
         self.textBox.insert(tk.END, 1000*text)
+        self.textBox.config(state = "disabled")

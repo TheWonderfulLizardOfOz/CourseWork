@@ -2,7 +2,6 @@ import tkinter as tk
 class Page(tk.Frame):
     def __init__(self, *args, **kwargs):
         tk.Frame.__init__(self, *args, **kwargs)
-        self.root = args[0]
 
     def show(self):
         self.lift()
@@ -34,6 +33,8 @@ class AddItemsAndSpellsPage(Page):
 class MainView(tk.Frame):
     def __init__(self, *args, **kwargs):
         tk.Frame.__init__(self, *args, **kwargs)
+        self.root = args[0]
+        self.root.title("DnD Tools")
 
         createCharacterPage = CreateCharacterPage(self)
         battlePage = BattlePage(self)
