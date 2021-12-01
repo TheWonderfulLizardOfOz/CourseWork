@@ -67,8 +67,8 @@ class Instructions(tk.Toplevel):
         self.scrollBar = tk.Scrollbar(self, command = self.textBox.yview)
         self.textBox.config(yscrollcommand = self.scrollBar.set, wrap = tk.WORD)
 
+        self.scrollBar.pack(side=tk.RIGHT, fill=tk.Y)
         self.textBox.pack(side = tk.LEFT, fill = tk.BOTH, expand = True)
-        self.scrollBar.pack(side = tk.RIGHT, fill = tk.Y)
 
         text = "hello "
         self.textBox.insert(tk.END, 1000*text)
