@@ -61,3 +61,12 @@ class StartPage(tk.Frame):
 class Instructions(tk.Toplevel):
     def __init__(self):
         tk.Toplevel.__init__(self)
+        self.textBox = tk.Text(self)
+        self.scrollBar = tk.Scrollbar(self, command = self.textBox.yview)
+        self.textBox.config(yscrollcommand = self.scrollBar.set, wrap = tk.WORD)
+
+        self.textBox.pack(side = tk.LEFT, fill = tk.BOTH, expand = True)
+        self.scrollBar.pack(side = tk.RIGHT, fill = tk.Y)
+
+        text = "hello "
+        self.textBox.insert(tk.END, 1000*text)
