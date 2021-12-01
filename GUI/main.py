@@ -2,7 +2,7 @@ from pages import *
 from startPage import *
 
 root = tk.Tk()
-root.geometry("800x450")
+root.geometry("1080x607")
 root.minsize(450, 300)
 main = StartPage(root)
 main.pack(side="top", fill="both", expand=True)
