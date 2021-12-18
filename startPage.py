@@ -11,7 +11,7 @@ class StartPage(tk.Frame):
         self.instructionsWindow = Instructions()
         self.instructionsWindow.withdraw()
 
-        self.image = Image.open("SolidImageLogo.png")
+        self.image = Image.open("Images\SolidImageLogo.png")
 
         self.backgroundImage = ImageTk.PhotoImage(self.image)
         self.background = tk.Label(self.root, image = self.backgroundImage)

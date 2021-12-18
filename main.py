@@ -1,5 +1,6 @@
 from pages import *
 from startPage import *
+import tkinter as tk
 
 root = tk.Tk()
 root.geometry("1080x607")
