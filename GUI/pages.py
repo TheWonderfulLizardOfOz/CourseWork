@@ -1,5 +1,4 @@
 import tkinter as tk
-import os.path
 
 class Page(tk.Frame):
     def __init__(self, *args, **kwargs):
@@ -41,7 +40,7 @@ class MainView(tk.Frame):
         tk.Frame.__init__(self, *args, **kwargs)
         self.root = args[0]
         self.root.title("DnD Tools")
-        self.settingsImage = tk.PhotoImage(file = os.path.dirname(__file__) + "/../Images/SettingsImage.png")
+        self.settingsImage = tk.PhotoImage(file = "SettingsImage.png")
         self.settingsImage = self.settingsImage.subsample(120, 120)
 
         createCharacterPage = CreateCharacterPage(self)
