@@ -1,4 +1,5 @@
 import tkinter as tk
+import time
 
 class Page(tk.Frame):
     def __init__(self, *args, **kwargs):
