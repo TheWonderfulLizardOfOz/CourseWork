@@ -24,33 +24,12 @@ class Background(commands.Cog):
         self.closeDB()
         return backgroundList
 
-    def getPersonalityList(self):
+    def getFeatureList(self, statement):
         self.openDB()
-        self.cursor.execute(self.personalityStatement)
-        personalityList = self.cursor.fetchall()
+        self.cursor.execute(statement)
+        featureList = self.cursor.fetchall()
         self.closeDB()
-        return personalityList
-
-    def getIdealList(self):
-        self.openDB()
-        self.cursor.execute(self.idealStatement)
-        idealList = self.cursor.fetchall()
-        self.closeDB()
-        return idealList
-
-    def getBondList(self):
-        self.openDB()
-        self.cursor.execute(self.bondStatement)
-        bondList = self.cursor.fetchall()
-        self.closeDB()
-        return bondList
-
-    def getFlawList(self):
-        self.openDB()
-        self.cursor.execute(self.flawStatement)
-        flawList = self.cursor.fetchall()
-        self.closeDB()
-        return flawList
+        return featureList
 
     def setStatements(self):
         self.personalityStatement = """SELECT personalityTrait.personalityTrait 
@@ -79,16 +58,16 @@ class RandomBackground(Background):
 
         self.setStatements()
 
-        personalityList = self.getPersonalityList()
+        personalityList = self.getFeatureList(self.personalityStatement)
         self.personality = self.setFeature(personalityList)
 
-        idealList = self.getIdealList()
+        idealList = self.getFeatureList(self.idealStatement)
         self.ideal = self.setFeature(idealList)
 
-        bondList = self.getBondList()
+        bondList = self.getFeatureList(self.bondStatement)
         self.bond = self.setFeature(bondList)
 
-        flawList = self.getFlawList()
+        flawList = self.getFeatureList(self.flawStatement)
         self.flaw = self.setFeature(flawList)
 
         self.message = self.setMessage()
