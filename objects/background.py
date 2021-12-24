@@ -80,16 +80,16 @@ class RandomBackground(Background):
         self.setStatements()
 
         personalityList = self.getPersonalityList()
-        self.setPersonality(personalityList)
+        self.personality = self.setFeature(personalityList)
 
         idealList = self.getIdealList()
-        self.setIdeal(idealList)
+        self.ideal = self.setFeature(idealList)
 
         bondList = self.getBondList()
-        self.setBond(bondList)
+        self.bond = self.setFeature(bondList)
 
         flawList = self.getFlawList()
-        self.setFlaw(flawList)
+        self.flaw = self.setFeature(flawList)
 
         self.message = self.setMessage()
 
@@ -105,21 +105,12 @@ class RandomBackground(Background):
         self.bondStatement = "SELECT bond.bond FROM bond"
         self.flawStatement = "SELECT flaw.flaw FROM flaw"
 
-
     def setBackground(self, backgroundList):
         (self.backgroundID, self.background, self.languagesNo) = random.choice(backgroundList)
 
-    def setPersonality(self, personalityList):
-        self.personality = random.choice(personalityList)[0]
-
-    def setIdeal(self, idealList):
-        self.ideal = random.choice(idealList)[0]
-
-    def setBond(self, bondList):
-        self.bond = random.choice(bondList)[0]
-
-    def setFlaw(self, flawList):
-        self.flaw = random.choice(flawList)[0]
+    def setFeature(self, featureList):
+        feature = random.choice(featureList)[0]
+        return feature
 
     def setMessage(self):
         message = """**`Background:`** {}
