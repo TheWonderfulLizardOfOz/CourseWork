@@ -6,14 +6,14 @@ load_dotenv(".env")
 TOKEN = os.getenv("DISCORD_TOKEN")
 bot = commands.Bot(command_prefix='!')
 
-extentions = []
+extensions = ["objects.owner", "objects.background"]
 
 @bot.event
 async def on_ready():
     print("bot is ready for stuff")
 
 if __name__ == "__main__":
-    for extension in extentions:
+    for extension in extensions:
         bot.load_extension(extension)
 
 bot.run(TOKEN)
