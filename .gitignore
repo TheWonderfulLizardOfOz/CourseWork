@@ -130,3 +130,6 @@ dmypy.json
 
 # To protect the token
 *.env
+
+# To remove files used for testing
+test.py
