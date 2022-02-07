@@ -1,5 +1,6 @@
 import tkinter as tk
 import time
+from objects.background import Background
 
 class Page(tk.Frame):
     def __init__(self, *args, **kwargs):
@@ -8,29 +9,32 @@ class Page(tk.Frame):
     def show(self):
         self.lift()
 
-class CreateCharacterPage(Page):
+class CreateCharacterPage(Page, Background):
     def __init__(self, *args, **kwargs):
         Page.__init__(self, *args, **kwargs)
-        __tkvar = ""
+        Background.__init__(self)
+        self.setLists()
+        __tkvar = tk.StringVar(self)
 
-        __values = []
-        backgroundOption = tk.OptionMenu(self, __tkvar, None, __values, command = None)
+        self.background = tk.StringVar(self)
+        self.background.set("Select an option")
+        backgroundOption = tk.OptionMenu(self, self.background, *self.backgroundOptionList, command = None)
         backgroundOption.place(relheight = 0.06, relwidth = "0.25", relx = "0.17", rely = "0.24")
 
-        __values = []
-        personalityOption = tk.OptionMenu(self, __tkvar, None, __values, command = None)
+        self.personalityOptionList = []
+        personalityOption = tk.OptionMenu(self, __tkvar, None, self.personalityOptionList, command = None)
         personalityOption.place(relheight = "0.06", relwidth = "0.25", relx = "0.17", rely = "0.3")
 
-        __values = []
-        idealOption = tk.OptionMenu(self, __tkvar, None, __values, command = None)
+        self.idealOptionList = []
+        idealOption = tk.OptionMenu(self, __tkvar, None, self.idealOptionList, command = None)
         idealOption.place(relheight = 0.06, relwidth = "0.25", relx = "0.17", rely = "0.36")
 
-        __values = []
-        bondOption = tk.OptionMenu(self, __tkvar, None, __values, command = None)
+        self.bondOptionList = []
+        bondOption = tk.OptionMenu(self, __tkvar, None, self.bondOptionList, command = None)
         bondOption.place(relheight = "0.06", relwidth = "0.25", relx = "0.17", rely = "0.42")
 
-        __values = []
-        flawOption = tk.OptionMenu(self, __tkvar, None, __values, command = None)
+        self.flawOptionList = []
+        flawOption = tk.OptionMenu(self, __tkvar, None, self.flawOptionList, command = None)
         flawOption.place(relheight = "0.06", relwidth = "0.25", relx = "0.17", rely = "0.48")
 
         backgroundLabel = tk.Label(self, relief = "groove", text = "Background")
@@ -87,12 +91,12 @@ class CreateCharacterPage(Page):
         nameEntry = tk.Entry(self)
         nameEntry.place(relheight = "0.06", relwidth = "0.15", relx = "0.08", rely = "0.03")
 
-        __values = []
-        raceOption = tk.OptionMenu(self, __tkvar, None, __values, command=None)
+        self.raceOptionList = []
+        raceOption = tk.OptionMenu(self, __tkvar, None, self.raceOptionList, command=None)
         raceOption.place(relheight = "0.06", relwidth = "0.15", relx = "0.08", rely = "0.09")
 
-        __values = []
-        classOption = tk.OptionMenu(self, __tkvar, None, __values, command=None)
+        self.classOptionList = []
+        classOption = tk.OptionMenu(self, __tkvar, None, self.classOptionList, command=None)
         classOption.place(relheight = "0.06", relwidth = "0.15", relx = "0.08", rely = "0.15")
 
         randomNameButton = tk.Button(self, text = "s")
@@ -161,67 +165,61 @@ class CreateCharacterPage(Page):
         languagesLabel = tk.Label(self, relief = "groove", text = "Languages")
         languagesLabel.place(relheight = "0.06", relwidth = "0.15", relx = "0.32", rely = "0.60")
 
-        __values = []
-        languageOptionOne = tk.OptionMenu(self, __tkvar, None, __values, command=None)
+        self.languageOptionList = []
+        languageOptionOne = tk.OptionMenu(self, __tkvar, None, self.languageOptionList, command=None)
         languageOptionOne.place(relheight = "0.06", relwidth = "0.15", relx = "0.32", rely = "0.66")
 
-        __values = []
-        languageOptionTwo = tk.OptionMenu(self, __tkvar, None, __values, command=None)
+        languageOptionTwo = tk.OptionMenu(self, __tkvar, None, self.languageOptionList, command=None)
         languageOptionTwo.place(relheight = "0.06", relwidth = "0.15", relx = "0.32", rely = "0.72")
 
-        __values = []
-        languageOptionThree = tk.OptionMenu(self, __tkvar, None, __values, command=None)
+        languageOptionThree = tk.OptionMenu(self, __tkvar, None, self.languageOptionList, command=None)
         languageOptionThree.place(relheight = "0.06", relwidth = "0.15", relx = "0.32", rely = "0.78")
-
-        __values = []
-        languageOptionFour = tk.OptionMenu(self, __tkvar, None, __values, command=None)
+#
+        languageOptionFour = tk.OptionMenu(self, __tkvar, None, self.languageOptionList, command=None)
         languageOptionFour.place(relheight = "0.06", relwidth = "0.15", relx = "0.32", rely = "0.84")
 
         skillLabel = tk.Label(self, relief = "groove", text = "Skills")
         skillLabel.place(relheight = "0.06", relwidth = "0.21", relx = "0.53", rely = "0.57")
 
-        __values = []
-        skillOptionOne = tk.OptionMenu(self, __tkvar, None, __values, command=None)
+        self.skillOptionList = []
+        skillOptionOne = tk.OptionMenu(self, __tkvar, None, self.skillOptionList, command=None)
         skillOptionOne.place(relheight = "0.06", relwidth = "0.21", relx = "0.53", rely = "0.63")
 
-        __values = []
-        skillOptionTwo = tk.OptionMenu(self, __tkvar, None, __values, command=None)
+        skillOptionTwo = tk.OptionMenu(self, __tkvar, None, self.skillOptionList, command=None)
         skillOptionTwo.place(relheight = "0.06", relwidth = "0.21", relx = "0.53", rely = "0.69")
 
-        __values = []
-        skillOptionThree = tk.OptionMenu(self, __tkvar, None, __values, command=None)
+        skillOptionThree = tk.OptionMenu(self, __tkvar, None, self.skillOptionList, command=None)
         skillOptionThree.place(relheight = "0.06", relwidth = "0.21", relx = "0.53", rely = "0.75")
 
-        __values = []
-        skillOptionFour = tk.OptionMenu(self, __tkvar, None, __values, command=None)
+        skillOptionFour = tk.OptionMenu(self, __tkvar, None, self.skillOptionList, command=None)
         skillOptionFour.place(relheight = "0.06", relwidth = "0.21", relx = "0.53", rely = "0.81")
 
-        __values = []
-        skillOptionFive = tk.OptionMenu(self, __tkvar, None, __values, command=None)
+        skillOptionFive = tk.OptionMenu(self, __tkvar, None, self.skillOptionList, command=None)
         skillOptionFive.place(relheight = "0.06", relwidth = "0.21", relx = "0.53", rely = "0.87")
 
         toolLabel = tk.Label(self, relief = "groove", text = "Tools")
         toolLabel.place(relheight = "0.06", relwidth = "0.21", relx = "0.77", rely = "0.57")
 
-        __values = []
-        toolOptionOne = tk.OptionMenu(self, __tkvar, None, __values, command=None)
+        self.toolOptionList = []
+        toolOptionOne = tk.OptionMenu(self, __tkvar, None, self.toolOptionList, command=None)
         toolOptionOne.place(relheight = "0.06", relwidth = "0.21", relx = "0.77", rely = "0.63")
 
-        __values = []
-        toolOptionTwo = tk.OptionMenu(self, __tkvar, None, __values, command=None)
+        toolOptionTwo = tk.OptionMenu(self, __tkvar, None, self.toolOptionList, command=None)
         toolOptionTwo.place(relheight = "0.06", relwidth = "0.21", relx = "0.77", rely = "0.69")
 
-        __values = []
-        toolOptionThree = tk.OptionMenu(self, __tkvar, None, __values, command=None)
+        toolOptionThree = tk.OptionMenu(self, __tkvar, None, self.toolOptionList, command=None)
         toolOptionThree.place(relheight = "0.06", relwidth = "0.21", relx = "0.77", rely = "0.75")
 
-        __values = []
-        toolOptionFour = tk.OptionMenu(self, __tkvar, None, __values, command=None)
+        toolOptionFour = tk.OptionMenu(self, __tkvar, None, self.toolOptionList, command=None)
         toolOptionFour.place(relheight = "0.06", relwidth = "0.21", relx = "0.77", rely = "0.81")
 
-        __values = []
-        toolOptionFive = tk.OptionMenu(self, __tkvar, None, __values, command=None)
+        toolOptionFive = tk.OptionMenu(self, __tkvar, None, self.toolOptionList, command=None)
         toolOptionFive.place(relheight = "0.06", relwidth = "0.21", relx = "0.77", rely = "0.87")
+
+    def setLists(self):
+        #reminder that not all lists have been set yet and will be set here in the future
+        self.backgroundOptionList = [background[1] for background in self.getBackgroundList()]
+        print(self.backgroundOptionList)
 
 class BattlePage(Page):
     def __init__(self, *args, **kwargs):

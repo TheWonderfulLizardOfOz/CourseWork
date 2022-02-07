@@ -128,8 +128,6 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# To protect the token
 *.env
-
-# To remove files used for testing
 test.py
+dndDB-backup.db

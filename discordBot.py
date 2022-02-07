@@ -7,6 +7,7 @@ TOKEN = os.getenv("DISCORD_TOKEN")
 bot = commands.Bot(command_prefix='!')
 
 extensions = ["objects.owner", "objects.background"]
+extensions.append("objects.test") #remove when uploading
 
 @bot.event
 async def on_ready():
