@@ -19,7 +19,7 @@ class Background(commands.Cog):
 
     def getBackgroundList(self):
         self.openDB()
-        self.cursor.execute("""SELECT * FROM background""")
+        self.cursor.execute("""SELECT backgroundID, backgroundName, languagesNo FROM background""")
         backgroundList = self.cursor.fetchall()
         self.closeDB()
         return backgroundList

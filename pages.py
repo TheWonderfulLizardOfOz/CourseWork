@@ -13,29 +13,34 @@ class CreateCharacterPage(Page, Background):
     def __init__(self, *args, **kwargs):
         Page.__init__(self, *args, **kwargs)
         Background.__init__(self)
+        self.setInitialStatements()
         self.setLists()
         __tkvar = tk.StringVar(self)
 
         self.background = tk.StringVar(self)
         self.background.set("Select an option")
-        backgroundOption = tk.OptionMenu(self, self.background, *self.backgroundOptionList, command = None)
-        backgroundOption.place(relheight = 0.06, relwidth = "0.25", relx = "0.17", rely = "0.24")
+        self.backgroundOption = tk.OptionMenu(self, self.background, *self.backgroundOptionList, command = self.backgroundUpdated)
+        self.backgroundOption.place(relheight = 0.06, relwidth = "0.25", relx = "0.17", rely = "0.24")
 
-        self.personalityOptionList = []
-        personalityOption = tk.OptionMenu(self, __tkvar, None, self.personalityOptionList, command = None)
-        personalityOption.place(relheight = "0.06", relwidth = "0.25", relx = "0.17", rely = "0.3")
+        self.personality = tk.StringVar(self)
+        self.personality.set("Select an option")
+        self.personalityOption = tk.OptionMenu(self, self.personality, *self.personalityOptionList, command = None)
+        self.personalityOption.place(relheight = "0.06", relwidth = "0.25", relx = "0.17", rely = "0.3")
 
-        self.idealOptionList = []
-        idealOption = tk.OptionMenu(self, __tkvar, None, self.idealOptionList, command = None)
-        idealOption.place(relheight = 0.06, relwidth = "0.25", relx = "0.17", rely = "0.36")
+        self.ideal = tk.StringVar(self)
+        self.ideal.set("Select an option")
+        self.idealOption = tk.OptionMenu(self, self.ideal, *self.idealOptionList, command = None)
+        self.idealOption.place(relheight = 0.06, relwidth = "0.25", relx = "0.17", rely = "0.36")
 
-        self.bondOptionList = []
-        bondOption = tk.OptionMenu(self, __tkvar, None, self.bondOptionList, command = None)
-        bondOption.place(relheight = "0.06", relwidth = "0.25", relx = "0.17", rely = "0.42")
+        self.bond = tk.StringVar(self)
+        self.bond.set("Select an option")
+        self.bondOption = tk.OptionMenu(self, self.bond, *self.bondOptionList, command = None)
+        self.bondOption.place(relheight = "0.06", relwidth = "0.25", relx = "0.17", rely = "0.42")
 
-        self.flawOptionList = []
-        flawOption = tk.OptionMenu(self, __tkvar, None, self.flawOptionList, command = None)
-        flawOption.place(relheight = "0.06", relwidth = "0.25", relx = "0.17", rely = "0.48")
+        self.flaw = tk.StringVar(self)
+        self.flaw.set("Select an option")
+        self.flawOption = tk.OptionMenu(self, self.flaw, *self.flawOptionList, command = None)
+        self.flawOption.place(relheight = "0.06", relwidth = "0.25", relx = "0.17", rely = "0.48")
 
         backgroundLabel = tk.Label(self, relief = "groove", text = "Background")
         backgroundLabel.place(relheight = "0.06", relwidth = "0.15", relx = "0.02", rely = "0.24")
@@ -174,7 +179,7 @@ class CreateCharacterPage(Page, Background):
 
         languageOptionThree = tk.OptionMenu(self, __tkvar, None, self.languageOptionList, command=None)
         languageOptionThree.place(relheight = "0.06", relwidth = "0.15", relx = "0.32", rely = "0.78")
-#
+
         languageOptionFour = tk.OptionMenu(self, __tkvar, None, self.languageOptionList, command=None)
         languageOptionFour.place(relheight = "0.06", relwidth = "0.15", relx = "0.32", rely = "0.84")
 
@@ -216,10 +221,47 @@ class CreateCharacterPage(Page, Background):
         toolOptionFive = tk.OptionMenu(self, __tkvar, None, self.toolOptionList, command=None)
         toolOptionFive.place(relheight = "0.06", relwidth = "0.21", relx = "0.77", rely = "0.87")
 
+    def setInitialStatements(self):
+        self.personalityStatement = "SELECT personalityTrait FROM personalityTrait"
+        self.idealStatement = "SELECT ideal FROM ideal"
+        self.bondStatement = "SELECT bond FROM bond"
+        self.flawStatement = "SELECT flaw FROM flaw"
+
     def setLists(self):
-        #reminder that not all lists have been set yet and will be set here in the future
         self.backgroundOptionList = [background[1] for background in self.getBackgroundList()]
-        print(self.backgroundOptionList)
+        self.personalityOptionList = [feature[0] for feature in self.getFeatureList(self.personalityStatement)]
+        self.idealOptionList = [feature[0] for feature in self.getFeatureList(self.idealStatement)]
+        self.bondOptionList = [feature[0] for feature in self.getFeatureList(self.bondStatement)]
+        self.flawOptionList = [feature[0] for feature in self.getFeatureList(self.flawStatement)]
+
+    def backgroundUpdated(self, *args):
+        self.openDB()
+        self.cursor.execute("""SELECT backgroundID FROM background WHERE backgroundName = ?""", [args[0]])
+        self.backgroundID = self.cursor.fetchall()
+        self.backgroundID = self.backgroundID[0][0]
+        self.closeDB()
+        self.setStatements()
+        self.setLists()
+
+        self.personalityOption.destroy()
+        self.personality.set("Select an option")
+        self.personalityOption = tk.OptionMenu(self, self.personality, *self.personalityOptionList, command=None)
+        self.personalityOption.place(relheight="0.06", relwidth="0.25", relx="0.17", rely="0.3")
+
+        self.idealOption.destroy()
+        self.ideal.set("Select an option")
+        self.idealOption = tk.OptionMenu(self, self.ideal, *self.idealOptionList, command=None)
+        self.idealOption.place(relheight=0.06, relwidth="0.25", relx="0.17", rely="0.36")
+
+        self.bondOption.destroy()
+        self.bond.set("Select an option")
+        self.bondOption = tk.OptionMenu(self, self.bond, *self.bondOptionList, command=None)
+        self.bondOption.place(relheight="0.06", relwidth="0.25", relx="0.17", rely="0.42")
+
+        self.flawOption.destroy()
+        self.flaw.set("Select an option")
+        self.flawOption = tk.OptionMenu(self, self.flaw, *self.flawOptionList, command=None)
+        self.flawOption.place(relheight="0.06", relwidth="0.25", relx="0.17", rely="0.48")
 
 class BattlePage(Page):
     def __init__(self, *args, **kwargs):
