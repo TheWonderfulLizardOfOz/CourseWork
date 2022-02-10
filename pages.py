@@ -19,6 +19,7 @@ class CreateCharacterPage(Page, Background):
 
         self.background = tk.StringVar(self)
         self.background.set("Select an option")
+        self.prevBackground = self.background.get()
         self.backgroundOption = tk.OptionMenu(self, self.background, *self.backgroundOptionList, command = self.backgroundUpdated)
         self.backgroundOption.place(relheight = 0.06, relwidth = "0.25", relx = "0.17", rely = "0.24")
 
@@ -235,6 +236,12 @@ class CreateCharacterPage(Page, Background):
         self.flawOptionList = [feature[0] for feature in self.getFeatureList(self.flawStatement)]
 
     def backgroundUpdated(self, *args):
+        self.newBackground = self.background.get()
+        if self.newBackground == self.prevBackground:
+            return
+        else:
+            self.prevBackground = self.newBackground
+
         self.openDB()
         self.cursor.execute("""SELECT backgroundID FROM background WHERE backgroundName = ?""", [args[0]])
         self.backgroundID = self.cursor.fetchall()
