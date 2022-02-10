@@ -1,5 +1,5 @@
 import tkinter as tk
-import time
+import random
 from objects.background import Background
 
 class Page(tk.Frame):
@@ -62,20 +62,20 @@ class CreateCharacterPage(Page, Background):
         flawLabel = tk.Label(self, relief = "groove", text = "Flaw")
         flawLabel.place(relheight = "0.06", relwidth = "0.15", relx = "0.02", rely = "0.48")
 
-        randomPersonalityButton = tk.Button(self, text = "s")
+        randomBackgroundButton = tk.Button(self, text="s", command=lambda: self.randomOption(self.backgroundOptionList, self.background))
+        randomBackgroundButton.place(relheight="0.06", relwidth="0.05", relx="0.42", rely="0.24")
+
+        randomPersonalityButton = tk.Button(self, text = "s", command=lambda: self.randomOption(self.personalityOptionList, self.personality))
         randomPersonalityButton.place(relheight = "0.06", relwidth = "0.05", relx = "0.42", rely = "0.3")
 
-        randomIdealButton = tk.Button(self, text = "s")
+        randomIdealButton = tk.Button(self, text = "s", command=lambda: self.randomOption(self.idealOptionList, self.ideal))
         randomIdealButton.place(relheight = "0.06", relwidth = "0.05", relx = "0.42", rely = "0.36")
 
-        randomBondButton = tk.Button(self, text = "s")
+        randomBondButton = tk.Button(self, text = "s", command=lambda: self.randomOption(self.bondOptionList, self.bond))
         randomBondButton.place(relheight = "0.06", relwidth = "0.05", relx = "0.42", rely = "0.42")
 
-        randomFlawButton = tk.Button(self, text = "s")
+        randomFlawButton = tk.Button(self, text = "s", command=lambda: self.randomOption(self.flawOptionList, self.flaw))
         randomFlawButton.place(relheight = "0.06", relwidth = 0.05, relx = "0.42", rely = "0.48")
-
-        randomBackgroundButton = tk.Button(self, text = "s")
-        randomBackgroundButton.place(relheight = "0.06", relwidth = "0.05", relx = "0.42", rely = "0.24")
 
         imageLabel = tk.Label(self, relief = "sunken", text = "Image")
         imageLabel.place(relheight = "0.45", relwidth = "0.45", relx = "0.53", rely = "0.03")
@@ -267,6 +267,11 @@ class CreateCharacterPage(Page, Background):
         self.flaw.set("Select an option")
         self.flawOption = tk.OptionMenu(self, self.flaw, *self.flawOptionList, command=None)
         self.flawOption.place(relheight="0.06", relwidth="0.25", relx="0.17", rely="0.48")
+
+    def randomOption(self, optionList, featureAttribute):
+        featureAttribute.set(random.choice(optionList))
+        if featureAttribute.get() in self.backgroundOptionList:
+            self.backgroundUpdated(featureAttribute.get())
 
 class BattlePage(Page):
     def __init__(self, *args, **kwargs):
