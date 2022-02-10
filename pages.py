@@ -13,9 +13,13 @@ class CreateCharacterPage(Page, Background):
     def __init__(self, *args, **kwargs):
         Page.__init__(self, *args, **kwargs)
         Background.__init__(self)
-        self.setInitialStatements()
-        self.setLists()
         __tkvar = tk.StringVar(self)
+
+        self.backgroundOptionList = [background[1] for background in self.getBackgroundList()]
+        self.personalityOptionList = ["Select a background first"]
+        self.idealOptionList = ["Select a background first"]
+        self.bondOptionList = ["Select a background first"]
+        self.flawOptionList = ["Select a background first"]
 
         self.background = tk.StringVar(self)
         self.background.set("Select an option")
@@ -221,12 +225,6 @@ class CreateCharacterPage(Page, Background):
 
         toolOptionFive = tk.OptionMenu(self, __tkvar, None, self.toolOptionList, command=None)
         toolOptionFive.place(relheight = "0.06", relwidth = "0.21", relx = "0.77", rely = "0.87")
-
-    def setInitialStatements(self):
-        self.personalityStatement = "SELECT personalityTrait FROM personalityTrait"
-        self.idealStatement = "SELECT ideal FROM ideal"
-        self.bondStatement = "SELECT bond FROM bond"
-        self.flawStatement = "SELECT flaw FROM flaw"
 
     def setLists(self):
         self.backgroundOptionList = [background[1] for background in self.getBackgroundList()]
