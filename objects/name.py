@@ -21,8 +21,10 @@ class Name(commands.Cog):
             await ctx.send("Invalid input, new lines and commas cannot be used.")
         else:
             file = open("names.txt", "a")
+            arg = arg.title()
             file.write(arg + ",\n")
             file.close()
+            self.namesList.append(arg)
             await ctx.send("Name added")
 
     def validateNameInput(self, userInput):
