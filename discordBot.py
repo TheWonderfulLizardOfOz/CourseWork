@@ -6,7 +6,7 @@ load_dotenv(".env")
 TOKEN = os.getenv("DISCORD_TOKEN")
 bot = commands.Bot(command_prefix='!')
 
-extensions = ["objects.owner", "objects.background"]
+extensions = ["objects.owner", "objects.background", "objects.name"]
 extensions.append("objects.test") #remove when uploading
 
 @bot.event
