@@ -16,9 +16,20 @@ class Name(commands.Cog):
 
     @commands.command()
     async def addName(self, ctx, arg):
-        file = open("names.txt", "a")
-        file.write(arg + ",\n")
-        await ctx.send("Name added")
+        valid = self.validateNameInput(arg)
+        if valid == False:
+            await ctx.send("Invalid input, new lines and commas cannot be used.")
+        else:
+            file = open("names.txt", "a")
+            file.write(arg + ",\n")
+            file.close()
+            await ctx.send("Name added")
+
+    def validateNameInput(self, userInput):
+        if r"\n" in userInput or "," in userInput:
+            return False
+        else:
+            return True
 
 def setup(bot):
     bot.add_cog(Name(bot))
