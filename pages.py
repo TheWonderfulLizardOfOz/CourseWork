@@ -175,6 +175,9 @@ class CreateCharacterPage(Page, Background):
         languageOptionFour = tk.OptionMenu(self, __tkvar, None, self.languageOptionList, command=None)
         languageOptionFour.place(relheight = "0.06", relwidth = "0.15", relx = "0.32", rely = "0.84")
 
+        randomLanguageButton = tk.Button(self, text="s", command=None)
+        randomLanguageButton.place(relheight="0.06", relwidth=0.05, relx="0.42", rely="0.6")
+
         skillLabel = tk.Label(self, relief = "groove", text = "Skills")
         skillLabel.place(relheight = "0.06", relwidth = "0.21", relx = "0.53", rely = "0.57")
 
@@ -194,6 +197,9 @@ class CreateCharacterPage(Page, Background):
         skillOptionFive = tk.OptionMenu(self, __tkvar, None, self.skillOptionList, command=None)
         skillOptionFive.place(relheight = "0.06", relwidth = "0.21", relx = "0.53", rely = "0.87")
 
+        randomSkillButton = tk.Button(self, text="s", command=None)
+        randomSkillButton.place(relheight="0.06", relwidth=0.05, relx="0.69", rely="0.57")
+
         toolLabel = tk.Label(self, relief = "groove", text = "Tools")
         toolLabel.place(relheight = "0.06", relwidth = "0.21", relx = "0.77", rely = "0.57")
 
@@ -212,6 +218,9 @@ class CreateCharacterPage(Page, Background):
 
         toolOptionFive = tk.OptionMenu(self, __tkvar, None, self.toolOptionList, command=None)
         toolOptionFive.place(relheight = "0.06", relwidth = "0.21", relx = "0.77", rely = "0.87")
+
+        randomToolButton = tk.Button(self, text="s", command=None)
+        randomToolButton.place(relheight="0.06", relwidth=0.05, relx="0.93", rely="0.57")
 
     def placeBackgroundFeatureWidgets(self):
         self.personality.set("Select an option")
