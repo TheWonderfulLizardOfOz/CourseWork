@@ -15,10 +15,13 @@ class Name(commands.Cog):
         await ctx.send(random.choice(self.namesList))
 
     @commands.command()
-    async def addName(self, ctx, arg):
-        valid = self.validateNameInput(arg)
+    async def addName(self, ctx, arg = None):
+        if arg == None:
+            valid = False
+        else:
+            valid = self.validateNameInput(arg)
         if valid == False:
-            await ctx.send("Invalid input, new lines and commas cannot be used.")
+            await ctx.send("Invalid input, can't be empty, new lines and commas cannot be used.")
         else:
             file = open("names.txt", "a")
             arg = arg.title()

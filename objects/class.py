@@ -20,11 +20,19 @@ class Class(commands.Cog):
         await ctx.send(random.choice(self.classList))
 
     @commands.command()
-    async def classDetails(self, ctx, arg):
-        self.getClassDetails(arg)
-        message = ""
-        for key, value in self.classDetailsDict.items():
-            message += "**`{}:`** {}\n".format(key, value)
+    async def classDetails(self, ctx, arg = None):
+        if arg == None or arg.title() not in self.classList:
+            listMessage = ""
+            for item in self.classList:
+                listMessage += item + ", "
+            listMessage = listMessage[0:-2]
+            message = "Invalid input available classes are: {}".format(listMessage)
+        else:
+            arg = arg.title()
+            self.getClassDetails(arg)
+            message = ""
+            for key, value in self.classDetailsDict.items():
+                message += "**`{}:`** {}\n".format(key, value)
         await ctx.send(message)
 
     def getClassDetails(self, arg):
@@ -38,7 +46,6 @@ class Class(commands.Cog):
             self.cursor.execute(statement)
             self.toolProficiencyType = self.cursor.fetchall()[0]
         self.closeDB()
-        print(classDetails)
 
         self.classID = classDetails[0]
         self.className = classDetails[1]
@@ -52,9 +59,8 @@ class Class(commands.Cog):
         self.shieldProf = self.setValue(classDetails[9])
         self.savingThrowOne = classDetails[10]
         self.savingThrowTwo = classDetails[11]
-        self.weaponProf = self.setValue(classDetails[12])
-        self.weaponRangeProf = self.setValue(classDetails[13])
-
+        self.weaponProf = classDetails[12]
+        self.weaponRangeProf = classDetails[13]
 
         self.classDetailsDict = {"Class name": self.className, "Hit dice": "d" + str(self.hitDice),
                                  "Number of available tool proficiencies": self.noTools,
@@ -64,7 +70,7 @@ class Class(commands.Cog):
                                  "Proficiency in medium Armour": self.mediumArmourProf,
                                  "Proficiency in heavy Armour": self.heavyArmourProf,
                                  "Proficiency in shields": self.shieldProf,
-                                 "Saving throws": [self.savingThrowOne, self.savingThrowTwo],
+                                 "Saving throws": self.savingThrowOne + ", " + self.savingThrowTwo,
                                  "Weapon proficiencies": self.weaponProf,
                                  "Proficiency range": self.weaponRangeProf}
 

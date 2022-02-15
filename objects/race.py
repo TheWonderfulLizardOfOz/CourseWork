@@ -15,9 +15,11 @@ class Races(commands.Cog):
         await ctx.send(random.choice(self.raceList))
 
     @commands.command()
-    async def raceDetails(self, ctx, arg):
-        arg = arg.title()
-        value = self.racesDict.get(arg)
+    async def raceDetails(self, ctx, arg = None):
+        value = None
+        if arg != None:
+            arg = arg.title()
+            value = self.racesDict.get(arg)
         if value != None:
             message = self.createMessage(value)
             await ctx.send(message)
