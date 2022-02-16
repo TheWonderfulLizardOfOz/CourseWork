@@ -7,11 +7,13 @@ class Class(commands.Cog):
         self.bot = bot
         self.classList = self.createClassList()
 
+    #Creates a list of available classes in database
     def createClassList(self):
         self.openDB()
         self.cursor.execute("""SELECT className FROM class""")
         classes = self.cursor.fetchall()
         self.closeDB()
+        #Uses list comprehension to create classList due to the format of the data from the database
         classList = [className[0] for className in classes]
         return classList
 
@@ -21,32 +23,40 @@ class Class(commands.Cog):
 
     @commands.command()
     async def classDetails(self, ctx, arg = None):
+        #Checks if argument is a valid class
         if arg == None or arg.title() not in self.classList:
             listMessage = ""
+            #Iterates through every item in the list and adds them to the message
             for item in self.classList:
                 listMessage += item + ", "
+            #Removes last 2 characters of the string which are ", "
             listMessage = listMessage[0:-2]
             message = "Invalid input available classes are: {}".format(listMessage)
         else:
             arg = arg.title()
             self.getClassDetails(arg)
             message = ""
+            #Iterates through the key value pairs in classDetailsDict and adds them to the message
             for key, value in self.classDetailsDict.items():
                 message += "**`{}:`** {}\n".format(key, value)
+        #Outputs message to the user on discord
         await ctx.send(message)
 
     def getClassDetails(self, arg):
+        #Gets all the fields of the class table containing the class requested by the user
         self.openDB()
         statement = """SELECT * FROM class WHERE class.className =  '""" + str(arg) + "'"
         self.cursor.execute(statement)
         classDetails = self.cursor.fetchall()[0]
         self.toolProficiencyType = None
+        #If the class has a tool proficiency it collects the type of proficiency from the database
         if classDetails[4] != None:
             statement = """SELECT toolType.toolType FROM toolType WHERE toolType.toolTypeID = """ + str(classDetails[4])
             self.cursor.execute(statement)
             self.toolProficiencyType = self.cursor.fetchall()[0]
         self.closeDB()
 
+        #Assigns all the values in the fields to attributes
         self.classID = classDetails[0]
         self.className = classDetails[1]
         self.hitDice = classDetails[2]
@@ -62,6 +72,7 @@ class Class(commands.Cog):
         self.weaponProf = classDetails[12]
         self.weaponRangeProf = classDetails[13]
 
+        #Creates a dictionairy to make the output easier to create
         self.classDetailsDict = {"Class name": self.className, "Hit dice": "d" + str(self.hitDice),
                                  "Number of available tool proficiencies": self.noTools,
                                  "Type of tool proficiency": self.toolProficiencyType,
@@ -74,6 +85,7 @@ class Class(commands.Cog):
                                  "Weapon proficiencies": self.weaponProf,
                                  "Proficiency range": self.weaponRangeProf}
 
+    #Turns binary 0 or 1 into boolean
     def setValue(self, value):
         if value == 0:
             return False

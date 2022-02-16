@@ -3,32 +3,40 @@ import random
 from objects.background import Background
 from objects.name import Name
 
+#Class which allows universal methods for all the pages
 class Page(tk.Frame):
     def __init__(self, *args, **kwargs):
         tk.Frame.__init__(self, *args, **kwargs)
 
+    #Used to lift a page to front making it visible to user
     def show(self):
         self.lift()
 
 class CreateCharacterPage(Page, Background, Name):
     def __init__(self, *args, **kwargs):
+        #Calls super class constructors
         Page.__init__(self, *args, **kwargs)
         Background.__init__(self)
         Name.__init__(self)
 
         __tkvar = tk.StringVar(self)
 
+        #Sets lists for option menus
         self.backgroundOptionList = [background[1] for background in self.getBackgroundList()]
         self.personalityOptionList = ["Select a background first"]
         self.idealOptionList = ["Select a background first"]
         self.bondOptionList = ["Select a background first"]
         self.flawOptionList = ["Select a background first"]
 
+        #Sets default values for option menus
         self.personality = tk.StringVar(self)
         self.ideal = tk.StringVar(self)
         self.bond = tk.StringVar(self)
         self.flaw = tk.StringVar(self)
 
+        #Places all the background feature option menu widgets
+        #In its own method due to multiple occasions where these widgets have to be destroyed and recreated
+        #So placing in its own method saves time and space
         self.placeBackgroundFeatureWidgets()
 
         self.background = tk.StringVar(self)
@@ -77,7 +85,7 @@ class CreateCharacterPage(Page, Background, Name):
         randomImageButton.place(relheight = "0.06", relwidth = "0.225", relx = "0.755", rely = "0.48")
 
         saveCharacterButton = tk.Button(self, text = "Save Character")
-        saveCharacterButton.place(relheight = 0.18, relwidth = "0.16", relx = "0.31", rely = "0.03")
+        saveCharacterButton.place(relheight = 0.09, relwidth = "0.16", relx = "0.31", rely = "0.03")
 
         nameLabel = tk.Label(self, relief = "groove", text = "Name")
         nameLabel.place(relheight = "0.06", relwidth = "0.06", relx = "0.02", rely = "0.03")
@@ -94,6 +102,9 @@ class CreateCharacterPage(Page, Background, Name):
         addName = tk.Button(self, text = "add", command = self.addName)
         addName.place(relheight = "0.06", relwidth = "0.05", relx = "0.18", rely = "0.03")
 
+        randomNameButton = tk.Button(self, text="s", command=self.randomName)
+        randomNameButton.place(relheight="0.06", relwidth="0.05", relx="0.23", rely="0.03")
+
         self.raceOptionList = []
         raceOption = tk.OptionMenu(self, __tkvar, None, self.raceOptionList, command=None)
         raceOption.place(relheight = "0.06", relwidth = "0.15", relx = "0.08", rely = "0.09")
@@ -101,9 +112,6 @@ class CreateCharacterPage(Page, Background, Name):
         self.classOptionList = []
         classOption = tk.OptionMenu(self, __tkvar, None, self.classOptionList, command=None)
         classOption.place(relheight = "0.06", relwidth = "0.15", relx = "0.08", rely = "0.15")
-
-        randomNameButton = tk.Button(self, text = "s", command = self.randomName)
-        randomNameButton.place(relheight = "0.06", relwidth = "0.05", relx = "0.23", rely = "0.03")
 
         randomRaceButton = tk.Button(self, text = "s")
         randomRaceButton.place(relheight = "0.06", relwidth = "0.05", relx = "0.23", rely = "0.09")
@@ -166,7 +174,7 @@ class CreateCharacterPage(Page, Background, Name):
         randomConstitutionButton.place(relheight = "0.06", relwidth = "0.05", relx = "0.23", rely = "0.87")
 
         languagesLabel = tk.Label(self, relief = "groove", text = "Languages")
-        languagesLabel.place(relheight = "0.06", relwidth = "0.15", relx = "0.32", rely = "0.60")
+        languagesLabel.place(relheight = "0.06", relwidth = "0.1", relx = "0.32", rely = "0.60")
 
         self.languageOptionList = []
         languageOptionOne = tk.OptionMenu(self, __tkvar, None, self.languageOptionList, command=None)
@@ -228,6 +236,10 @@ class CreateCharacterPage(Page, Background, Name):
         randomToolButton = tk.Button(self, text="s", command=None)
         randomToolButton.place(relheight="0.06", relwidth=0.05, relx="0.93", rely="0.57")
 
+        self.messageLabel = tk.Label(self, relief='sunken', text='Messages')
+        self.messageLabel.place(relheight='0.09', relwidth='0.16', relx='0.31', rely='0.12')
+
+    #Places all the background feature option menu widgets
     def placeBackgroundFeatureWidgets(self):
         self.personality.set("Select an option")
         self.personalityOption = tk.OptionMenu(self, self.personality, *self.personalityOptionList, command=None)
@@ -252,7 +264,11 @@ class CreateCharacterPage(Page, Background, Name):
         self.bondOptionList = [feature[0] for feature in self.getFeatureList(self.bondStatement)]
         self.flawOptionList = [feature[0] for feature in self.getFeatureList(self.flawStatement)]
 
+    #Runs when an option is selected in background option menu
+    #Method used to reset values in other option menus related to background
+    #As each background has unique background features
     def backgroundUpdated(self, *args):
+        #Checks if background is same as previous, if same nothing happens
         self.newBackground = self.background.get()
         if self.newBackground == self.prevBackground:
             return
@@ -275,6 +291,7 @@ class CreateCharacterPage(Page, Background, Name):
 
         self.placeBackgroundFeatureWidgets()
 
+    #Will set the value in the attribute passed to a randomly selected option in the list passed
     def randomOption(self, optionList, featureAttribute):
         featureAttribute.set(random.choice(optionList))
         if featureAttribute.get() in self.backgroundOptionList:
@@ -293,6 +310,9 @@ class CreateCharacterPage(Page, Background, Name):
             valid = False
         if valid == True:
             self.addNameToFile(name)
+            self.messageLabel["text"] = "Name added to file" #Updates messageLabel attribute to let the user know that a name was successfully added
+        elif valid == False:
+            self.messageLabel["text"] = "Invalid Name"
 
 class BattlePage(Page):
     def __init__(self, *args, **kwargs):
@@ -324,8 +344,10 @@ class MainView(tk.Frame):
         self.root = args[0]
         self.root.title("DnD Tools")
         self.settingsImage = tk.PhotoImage(file = "Images\SettingsImage.png")
+        #Sets the size of the image to be smaller so that it will fix in the button for settings
         self.settingsImage = self.settingsImage.subsample(120, 120)
 
+        #Sets up the pages
         createCharacterPage = CreateCharacterPage(self)
         battlePage = BattlePage(self)
         dicePage = DicePage(self)
@@ -334,11 +356,13 @@ class MainView(tk.Frame):
         addItemsAndSpellsPage = AddItemsAndSpellsPage(self)
         settingsPage = SettingsPage(self)
 
+        #Creates a button Frame for all the tabs and a container for all the pages
         buttonFrame = tk.Frame(self)
         container = tk.Frame(self)
         buttonFrame.pack(side = "top", fill = "x", expand = False)
         container.pack(side = "top", fill = "both", expand = True)
 
+        #Places the Pages in the container
         createCharacterPage.place(in_ = container, x = 0, y = 9, relwidth = 1, relheight = 1)
         battlePage.place(in_ = container, x = 0, y = 9, relwidth = 1, relheight = 1)
         dicePage.place(in_ = container, x = 0, y = 9, relwidth = 1, relheight = 1)
@@ -347,6 +371,7 @@ class MainView(tk.Frame):
         addItemsAndSpellsPage.place(in_ = container, x = 0, y = 9, relwidth = 1, relheight = 1)
         settingsPage.place(in_ = container, x = 0, y = 9, relwidth = 1, relheight = 1)
 
+        #Creates the buttons that will be used to change to each page
         buttonCreateCharacterPage = tk.Button(buttonFrame, text = "Create character", command = createCharacterPage.lift)
         buttonBattlePage = tk.Button(buttonFrame, text = "Battle", command = battlePage.lift)
         buttonDicePage = tk.Button(buttonFrame, text = "Roll Dice", command = dicePage.lift)
@@ -355,6 +380,7 @@ class MainView(tk.Frame):
         buttonAddItemsAndSpellsPage = tk.Button(buttonFrame, text = "Add items/spells", command = addItemsAndSpellsPage.lift)
         settingsButton = tk.Button(buttonFrame, image = self.settingsImage, command = settingsPage.lift)
 
+        #Places the buttons in the button fram
         buttonCreateCharacterPage.pack(side = "left")
         buttonBattlePage.pack(side = "left")
         buttonDicePage.pack(side = "left")
@@ -363,4 +389,5 @@ class MainView(tk.Frame):
         buttonAddItemsAndSpellsPage.pack(side = "left")
         settingsButton.pack(side = "right")
 
+        #Sets the createCharacterPage as the page shown when opening
         createCharacterPage.show()
