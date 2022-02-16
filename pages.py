@@ -1,6 +1,7 @@
 import tkinter as tk
 import random
 from objects.background import Background
+from objects.name import Name
 
 class Page(tk.Frame):
     def __init__(self, *args, **kwargs):
@@ -9,10 +10,12 @@ class Page(tk.Frame):
     def show(self):
         self.lift()
 
-class CreateCharacterPage(Page, Background):
+class CreateCharacterPage(Page, Background, Name):
     def __init__(self, *args, **kwargs):
         Page.__init__(self, *args, **kwargs)
         Background.__init__(self)
+        Name.__init__(self)
+
         __tkvar = tk.StringVar(self)
 
         self.backgroundOptionList = [background[1] for background in self.getBackgroundList()]
@@ -85,10 +88,10 @@ class CreateCharacterPage(Page, Background):
         classLabel = tk.Label(self, relief = "groove", text = "Class")
         classLabel.place(relheight = "0.06", relwidth = "0.06", relx = "0.02", rely = "0.15")
 
-        nameEntry = tk.Entry(self)
-        nameEntry.place(relheight = "0.06", relwidth = "0.1", relx = "0.08", rely = "0.03")
+        self.nameEntry = tk.Entry(self)
+        self.nameEntry.place(relheight = "0.06", relwidth = "0.1", relx = "0.08", rely = "0.03")
 
-        addName = tk.Button(self, text = "add")
+        addName = tk.Button(self, text = "add", command = self.addName)
         addName.place(relheight = "0.06", relwidth = "0.05", relx = "0.18", rely = "0.03")
 
         self.raceOptionList = []
@@ -99,7 +102,7 @@ class CreateCharacterPage(Page, Background):
         classOption = tk.OptionMenu(self, __tkvar, None, self.classOptionList, command=None)
         classOption.place(relheight = "0.06", relwidth = "0.15", relx = "0.08", rely = "0.15")
 
-        randomNameButton = tk.Button(self, text = "s")
+        randomNameButton = tk.Button(self, text = "s", command = self.randomName)
         randomNameButton.place(relheight = "0.06", relwidth = "0.05", relx = "0.23", rely = "0.03")
 
         randomRaceButton = tk.Button(self, text = "s")
@@ -276,6 +279,20 @@ class CreateCharacterPage(Page, Background):
         featureAttribute.set(random.choice(optionList))
         if featureAttribute.get() in self.backgroundOptionList:
             self.backgroundUpdated(featureAttribute.get())
+
+    def randomName(self):
+        nameSelection = random.choice(self.namesList)
+        self.nameEntry.delete(0, tk.END)
+        self.nameEntry.insert(0, nameSelection)
+
+    def addName(self):
+        name = self.nameEntry.get()
+        if name != None:
+            valid = self.validateNameInput(name)
+        else:
+            valid = False
+        if valid == True:
+            self.addNameToFile(name)
 
 class BattlePage(Page):
     def __init__(self, *args, **kwargs):
