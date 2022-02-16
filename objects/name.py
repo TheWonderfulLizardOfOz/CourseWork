@@ -23,15 +23,18 @@ class Name(commands.Cog):
         if valid == False:
             await ctx.send("Invalid input, can't be empty, new lines and commas cannot be used.")
         else:
-            file = open("names.txt", "a")
-            arg = arg.title()
-            file.write(arg + ",\n")
-            file.close()
-            self.namesList.append(arg)
+            self.addNameToFile(arg)
             await ctx.send("Name added")
 
+    def addNameToFile(self, name):
+        file = open("names.txt", "a")
+        name = name.title()
+        file.write(name + ",\n")
+        file.close()
+        self.namesList.append(name)
+
     def validateNameInput(self, userInput):
-        if r"\n" in userInput or "," in userInput:
+        if r"\n" in userInput or "," in userInput or userInput.isspace() == True:
             return False
         else:
             return True
