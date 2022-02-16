@@ -86,7 +86,10 @@ class CreateCharacterPage(Page, Background):
         classLabel.place(relheight = "0.06", relwidth = "0.06", relx = "0.02", rely = "0.15")
 
         nameEntry = tk.Entry(self)
-        nameEntry.place(relheight = "0.06", relwidth = "0.15", relx = "0.08", rely = "0.03")
+        nameEntry.place(relheight = "0.06", relwidth = "0.1", relx = "0.08", rely = "0.03")
+
+        addName = tk.Button(self, text = "add")
+        addName.place(relheight = "0.06", relwidth = "0.05", relx = "0.18", rely = "0.03")
 
         self.raceOptionList = []
         raceOption = tk.OptionMenu(self, __tkvar, None, self.raceOptionList, command=None)
