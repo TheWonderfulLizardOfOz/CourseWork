@@ -43,7 +43,7 @@ class Name(commands.Cog):
 
     #Method used to validate the user input
     def validateNameInput(self, userInput):
-        if r"\n" in userInput or "," in userInput or userInput.isspace() == True:
+        if r"\n" in userInput or "," in userInput or userInput.isspace() == True or userInput == "":
             return False
         else:
             return True
