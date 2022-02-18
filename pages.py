@@ -2,6 +2,8 @@ import tkinter as tk
 import random
 from objects.background import Background
 from objects.name import Name
+from objects.classes import Class
+from objects.race import Races
 
 #Class which allows universal methods for all the pages
 class Page(tk.Frame):
@@ -12,12 +14,14 @@ class Page(tk.Frame):
     def show(self):
         self.lift()
 
-class CreateCharacterPage(Page, Background, Name):
+class CreateCharacterPage(Page, Background, Name, Class, Races):
     def __init__(self, *args, **kwargs):
         #Calls super class constructors
         Page.__init__(self, *args, **kwargs)
         Background.__init__(self)
         Name.__init__(self)
+        Class.__init__(self)
+        Races.__init__(self)
 
         __tkvar = tk.StringVar(self)
 
@@ -33,7 +37,10 @@ class CreateCharacterPage(Page, Background, Name):
         self.ideal = tk.StringVar(self)
         self.bond = tk.StringVar(self)
         self.flaw = tk.StringVar(self)
-
+        self.classChoice = tk.StringVar(self)
+        self.classChoice.set("Select and option")
+        self.race = tk.StringVar(self)
+        self.race.set("Select an option")
         #Places all the background feature option menu widgets
         #In its own method due to multiple occasions where these widgets have to be destroyed and recreated
         #So placing in its own method saves time and space
@@ -60,19 +67,19 @@ class CreateCharacterPage(Page, Background, Name):
         flawLabel = tk.Label(self, relief = "groove", text = "Flaw")
         flawLabel.place(relheight = "0.06", relwidth = "0.15", relx = "0.02", rely = "0.48")
 
-        randomBackgroundButton = tk.Button(self, text="s", command=lambda: self.randomOption(self.backgroundOptionList, self.background))
+        randomBackgroundButton = tk.Button(self, text="Rand", command=lambda: self.randomOption(self.backgroundOptionList, self.background))
         randomBackgroundButton.place(relheight="0.06", relwidth="0.05", relx="0.42", rely="0.24")
 
-        randomPersonalityButton = tk.Button(self, text = "s", command=lambda: self.randomOption(self.personalityOptionList, self.personality))
+        randomPersonalityButton = tk.Button(self, text = "Rand", command=lambda: self.randomOption(self.personalityOptionList, self.personality))
         randomPersonalityButton.place(relheight = "0.06", relwidth = "0.05", relx = "0.42", rely = "0.3")
 
-        randomIdealButton = tk.Button(self, text = "s", command=lambda: self.randomOption(self.idealOptionList, self.ideal))
+        randomIdealButton = tk.Button(self, text = "Rand", command=lambda: self.randomOption(self.idealOptionList, self.ideal))
         randomIdealButton.place(relheight = "0.06", relwidth = "0.05", relx = "0.42", rely = "0.36")
 
-        randomBondButton = tk.Button(self, text = "s", command=lambda: self.randomOption(self.bondOptionList, self.bond))
+        randomBondButton = tk.Button(self, text = "Rand", command=lambda: self.randomOption(self.bondOptionList, self.bond))
         randomBondButton.place(relheight = "0.06", relwidth = "0.05", relx = "0.42", rely = "0.42")
 
-        randomFlawButton = tk.Button(self, text = "s", command=lambda: self.randomOption(self.flawOptionList, self.flaw))
+        randomFlawButton = tk.Button(self, text = "Rand", command=lambda: self.randomOption(self.flawOptionList, self.flaw))
         randomFlawButton.place(relheight = "0.06", relwidth = 0.05, relx = "0.42", rely = "0.48")
 
         imageLabel = tk.Label(self, relief = "sunken", text = "Image")
@@ -102,21 +109,19 @@ class CreateCharacterPage(Page, Background, Name):
         addName = tk.Button(self, text = "add", command = self.addName)
         addName.place(relheight = "0.06", relwidth = "0.05", relx = "0.18", rely = "0.03")
 
-        randomNameButton = tk.Button(self, text="s", command=self.randomName)
+        randomNameButton = tk.Button(self, text="Rand", command=self.randomName)
         randomNameButton.place(relheight="0.06", relwidth="0.05", relx="0.23", rely="0.03")
 
-        self.raceOptionList = []
-        raceOption = tk.OptionMenu(self, __tkvar, None, self.raceOptionList, command=None)
+        raceOption = tk.OptionMenu(self, self.race, *self.raceList, command=None)
         raceOption.place(relheight = "0.06", relwidth = "0.15", relx = "0.08", rely = "0.09")
 
-        self.classOptionList = []
-        classOption = tk.OptionMenu(self, __tkvar, None, self.classOptionList, command=None)
+        classOption = tk.OptionMenu(self, self.classChoice, *self.classList, command=None)
         classOption.place(relheight = "0.06", relwidth = "0.15", relx = "0.08", rely = "0.15")
 
-        randomRaceButton = tk.Button(self, text = "s")
+        randomRaceButton = tk.Button(self, text = "Rand", command = lambda: self.randomOption(self.raceList, self.race))
         randomRaceButton.place(relheight = "0.06", relwidth = "0.05", relx = "0.23", rely = "0.09")
 
-        randomClassButton = tk.Button(self, text = "s")
+        randomClassButton = tk.Button(self, text = "Rand", command = lambda: self.randomOption(self.classList, self.classChoice))
         randomClassButton.place(relheight = "0.06", relwidth = "0.05", relx = "0.23", rely = "0.15")
 
         strengthLabel = tk.Label(self, relief = "groove", text = "Strength")
@@ -155,22 +160,22 @@ class CreateCharacterPage(Page, Background, Name):
         constitutionEntry = tk.Entry(self)
         constitutionEntry.place(relheight = "0.06", relwidth = "0.06", relx = "0.17", rely = "0.87")
 
-        randomStrengthButton = tk.Button(self, text = "s")
+        randomStrengthButton = tk.Button(self, text = "Rand")
         randomStrengthButton.place(relheight = "0.06", relwidth = "0.05", relx = "0.23", rely = "0.57")
 
-        randomCharismaButton = tk.Button(self, text = "s")
+        randomCharismaButton = tk.Button(self, text = "Rand")
         randomCharismaButton.place(relheight = "0.06", relwidth = "0.05", relx = "0.23", rely = "0.63")
 
-        randomWisdomButton = tk.Button(self, text = "s")
+        randomWisdomButton = tk.Button(self, text = "Rand")
         randomWisdomButton.place(relheight = "0.06", relwidth = "0.05", relx = "0.23", rely = "0.69")
 
-        randomIntelligenceButton = tk.Button(self, text = "s")
+        randomIntelligenceButton = tk.Button(self, text = "Rand")
         randomIntelligenceButton.place(relheight = "0.06", relwidth = "0.05", relx = "0.23", rely = "0.75")
 
-        randomDexterityButton = tk.Button(self, text = "s")
+        randomDexterityButton = tk.Button(self, text = "Rand")
         randomDexterityButton.place(relheight = "0.06", relwidth = "0.05", relx = "0.23", rely = "0.81")
 
-        randomConstitutionButton = tk.Button(self, text = "s")
+        randomConstitutionButton = tk.Button(self, text = "Rand")
         randomConstitutionButton.place(relheight = "0.06", relwidth = "0.05", relx = "0.23", rely = "0.87")
 
         languagesLabel = tk.Label(self, relief = "groove", text = "Languages")
@@ -189,11 +194,11 @@ class CreateCharacterPage(Page, Background, Name):
         languageOptionFour = tk.OptionMenu(self, __tkvar, None, self.languageOptionList, command=None)
         languageOptionFour.place(relheight = "0.06", relwidth = "0.15", relx = "0.32", rely = "0.84")
 
-        randomLanguageButton = tk.Button(self, text="s", command=None)
+        randomLanguageButton = tk.Button(self, text="Rand", command=None)
         randomLanguageButton.place(relheight="0.06", relwidth=0.05, relx="0.42", rely="0.6")
 
         skillLabel = tk.Label(self, relief = "groove", text = "Skills")
-        skillLabel.place(relheight = "0.06", relwidth = "0.21", relx = "0.53", rely = "0.57")
+        skillLabel.place(relheight = "0.06", relwidth = "0.16", relx = "0.53", rely = "0.57")
 
         self.skillOptionList = []
         skillOptionOne = tk.OptionMenu(self, __tkvar, None, self.skillOptionList, command=None)
@@ -211,11 +216,11 @@ class CreateCharacterPage(Page, Background, Name):
         skillOptionFive = tk.OptionMenu(self, __tkvar, None, self.skillOptionList, command=None)
         skillOptionFive.place(relheight = "0.06", relwidth = "0.21", relx = "0.53", rely = "0.87")
 
-        randomSkillButton = tk.Button(self, text="s", command=None)
+        randomSkillButton = tk.Button(self, text="Rand", command=None)
         randomSkillButton.place(relheight="0.06", relwidth=0.05, relx="0.69", rely="0.57")
 
         toolLabel = tk.Label(self, relief = "groove", text = "Tools")
-        toolLabel.place(relheight = "0.06", relwidth = "0.21", relx = "0.77", rely = "0.57")
+        toolLabel.place(relheight = "0.06", relwidth = "0.16", relx = "0.77", rely = "0.57")
 
         self.toolOptionList = []
         toolOptionOne = tk.OptionMenu(self, __tkvar, None, self.toolOptionList, command=None)
@@ -233,7 +238,7 @@ class CreateCharacterPage(Page, Background, Name):
         toolOptionFive = tk.OptionMenu(self, __tkvar, None, self.toolOptionList, command=None)
         toolOptionFive.place(relheight = "0.06", relwidth = "0.21", relx = "0.77", rely = "0.87")
 
-        randomToolButton = tk.Button(self, text="s", command=None)
+        randomToolButton = tk.Button(self, text="Rand", command=None)
         randomToolButton.place(relheight="0.06", relwidth=0.05, relx="0.93", rely="0.57")
 
         self.messageLabel = tk.Label(self, relief='sunken', text='Messages')
