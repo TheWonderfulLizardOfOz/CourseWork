@@ -315,7 +315,8 @@ class CreateCharacterPage(Page, Background, Name, Class, Races):
             valid = False
         if valid == True:
             self.addNameToFile(name)
-            self.messageLabel["text"] = "Name added to file" #Updates messageLabel attribute to let the user know that a name was successfully added
+            # Updates messageLabel attribute to let the user know that a name was successfully added
+            self.messageLabel["text"] = "Name added to file"
         elif valid == False:
             self.messageLabel["text"] = "Invalid Name"
 
@@ -381,15 +382,15 @@ class MainView(tk.Frame):
         buttonBattlePage = tk.Button(buttonFrame, text = "Battle", command = battlePage.lift)
         buttonDicePage = tk.Button(buttonFrame, text = "Roll Dice", command = dicePage.lift)
         buttonCharacterSheetPage = tk.Button(buttonFrame, text = "View Characters", command = characterSheetPage.lift)
-        buttonItemsAndSpellsPage = tk.Button(buttonFrame, text = "Items/Spells", command = itemsAndSpellsPage.lift)
-        buttonAddItemsAndSpellsPage = tk.Button(buttonFrame, text = "Add items/spells", command = addItemsAndSpellsPage.lift)
+        buttonItemsAndSpellsPage = tk.Button(buttonFrame, text = "View items/spells", command = itemsAndSpellsPage.lift)
+        buttonAddItemsAndSpellsPage = tk.Button(buttonFrame, text = "Add new items/spells", command = addItemsAndSpellsPage.lift)
         settingsButton = tk.Button(buttonFrame, image = self.settingsImage, command = settingsPage.lift)
 
         #Places the buttons in the button fram
         buttonCreateCharacterPage.pack(side = "left")
+        buttonCharacterSheetPage.pack(side="left")
         buttonBattlePage.pack(side = "left")
         buttonDicePage.pack(side = "left")
-        buttonCharacterSheetPage.pack(side = "left")
         buttonItemsAndSpellsPage.pack(side = "left")
         buttonAddItemsAndSpellsPage.pack(side = "left")
         settingsButton.pack(side = "right")
