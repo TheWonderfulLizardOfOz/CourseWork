@@ -23,7 +23,7 @@ class CreateCharacterPage(Page, Background, Name, Class, Races):
         Class.__init__(self)
         Races.__init__(self)
 
-        __tkvar = tk.StringVar(self)
+        tempDefualt = tk.StringVar(self)
 
         #Sets lists for option menus
         self.backgroundOptionList = [background[1] for background in self.getBackgroundList()]
@@ -112,10 +112,10 @@ class CreateCharacterPage(Page, Background, Name, Class, Races):
         randomNameButton = tk.Button(self, text="Rand", command=self.randomName)
         randomNameButton.place(relheight="0.06", relwidth="0.05", relx="0.23", rely="0.03")
 
-        raceOption = tk.OptionMenu(self, self.race, *self.raceList, command=None)
+        raceOption = tk.OptionMenu(self, self.race, *self.raceList)
         raceOption.place(relheight = "0.06", relwidth = "0.15", relx = "0.08", rely = "0.09")
 
-        classOption = tk.OptionMenu(self, self.classChoice, *self.classList, command=None)
+        classOption = tk.OptionMenu(self, self.classChoice, *self.classList)
         classOption.place(relheight = "0.06", relwidth = "0.15", relx = "0.08", rely = "0.15")
 
         randomRaceButton = tk.Button(self, text = "Rand", command = lambda: self.randomOption(self.raceList, self.race))
@@ -182,63 +182,63 @@ class CreateCharacterPage(Page, Background, Name, Class, Races):
         languagesLabel.place(relheight = "0.06", relwidth = "0.1", relx = "0.32", rely = "0.60")
 
         self.languageOptionList = []
-        languageOptionOne = tk.OptionMenu(self, __tkvar, None, self.languageOptionList, command=None)
+        languageOptionOne = tk.OptionMenu(self, tempDefualt, None, self.languageOptionList)
         languageOptionOne.place(relheight = "0.06", relwidth = "0.15", relx = "0.32", rely = "0.66")
 
-        languageOptionTwo = tk.OptionMenu(self, __tkvar, None, self.languageOptionList, command=None)
+        languageOptionTwo = tk.OptionMenu(self, tempDefualt, None, self.languageOptionList)
         languageOptionTwo.place(relheight = "0.06", relwidth = "0.15", relx = "0.32", rely = "0.72")
 
-        languageOptionThree = tk.OptionMenu(self, __tkvar, None, self.languageOptionList, command=None)
+        languageOptionThree = tk.OptionMenu(self, tempDefualt, None, self.languageOptionList)
         languageOptionThree.place(relheight = "0.06", relwidth = "0.15", relx = "0.32", rely = "0.78")
 
-        languageOptionFour = tk.OptionMenu(self, __tkvar, None, self.languageOptionList, command=None)
+        languageOptionFour = tk.OptionMenu(self, tempDefualt, None, self.languageOptionList)
         languageOptionFour.place(relheight = "0.06", relwidth = "0.15", relx = "0.32", rely = "0.84")
 
-        randomLanguageButton = tk.Button(self, text="Rand", command=None)
+        randomLanguageButton = tk.Button(self, text="Rand")
         randomLanguageButton.place(relheight="0.06", relwidth=0.05, relx="0.42", rely="0.6")
 
         skillLabel = tk.Label(self, relief = "groove", text = "Skills")
         skillLabel.place(relheight = "0.06", relwidth = "0.16", relx = "0.53", rely = "0.57")
 
         self.skillOptionList = []
-        skillOptionOne = tk.OptionMenu(self, __tkvar, None, self.skillOptionList, command=None)
+        skillOptionOne = tk.OptionMenu(self, tempDefualt, None, self.skillOptionList)
         skillOptionOne.place(relheight = "0.06", relwidth = "0.21", relx = "0.53", rely = "0.63")
 
-        skillOptionTwo = tk.OptionMenu(self, __tkvar, None, self.skillOptionList, command=None)
+        skillOptionTwo = tk.OptionMenu(self, tempDefualt, None, self.skillOptionList)
         skillOptionTwo.place(relheight = "0.06", relwidth = "0.21", relx = "0.53", rely = "0.69")
 
-        skillOptionThree = tk.OptionMenu(self, __tkvar, None, self.skillOptionList, command=None)
+        skillOptionThree = tk.OptionMenu(self, tempDefualt, None, self.skillOptionList)
         skillOptionThree.place(relheight = "0.06", relwidth = "0.21", relx = "0.53", rely = "0.75")
 
-        skillOptionFour = tk.OptionMenu(self, __tkvar, None, self.skillOptionList, command=None)
+        skillOptionFour = tk.OptionMenu(self, tempDefualt, None, self.skillOptionList)
         skillOptionFour.place(relheight = "0.06", relwidth = "0.21", relx = "0.53", rely = "0.81")
 
-        skillOptionFive = tk.OptionMenu(self, __tkvar, None, self.skillOptionList, command=None)
+        skillOptionFive = tk.OptionMenu(self, tempDefualt, None, self.skillOptionList)
         skillOptionFive.place(relheight = "0.06", relwidth = "0.21", relx = "0.53", rely = "0.87")
 
-        randomSkillButton = tk.Button(self, text="Rand", command=None)
+        randomSkillButton = tk.Button(self, text="Rand")
         randomSkillButton.place(relheight="0.06", relwidth=0.05, relx="0.69", rely="0.57")
 
         toolLabel = tk.Label(self, relief = "groove", text = "Tools")
         toolLabel.place(relheight = "0.06", relwidth = "0.16", relx = "0.77", rely = "0.57")
 
         self.toolOptionList = []
-        toolOptionOne = tk.OptionMenu(self, __tkvar, None, self.toolOptionList, command=None)
+        toolOptionOne = tk.OptionMenu(self, tempDefualt, None, self.toolOptionList)
         toolOptionOne.place(relheight = "0.06", relwidth = "0.21", relx = "0.77", rely = "0.63")
 
-        toolOptionTwo = tk.OptionMenu(self, __tkvar, None, self.toolOptionList, command=None)
+        toolOptionTwo = tk.OptionMenu(self, tempDefualt, None, self.toolOptionList)
         toolOptionTwo.place(relheight = "0.06", relwidth = "0.21", relx = "0.77", rely = "0.69")
 
-        toolOptionThree = tk.OptionMenu(self, __tkvar, None, self.toolOptionList, command=None)
+        toolOptionThree = tk.OptionMenu(self, tempDefualt, None, self.toolOptionList)
         toolOptionThree.place(relheight = "0.06", relwidth = "0.21", relx = "0.77", rely = "0.75")
 
-        toolOptionFour = tk.OptionMenu(self, __tkvar, None, self.toolOptionList, command=None)
+        toolOptionFour = tk.OptionMenu(self, tempDefualt, None, self.toolOptionList)
         toolOptionFour.place(relheight = "0.06", relwidth = "0.21", relx = "0.77", rely = "0.81")
 
-        toolOptionFive = tk.OptionMenu(self, __tkvar, None, self.toolOptionList, command=None)
+        toolOptionFive = tk.OptionMenu(self, tempDefualt, None, self.toolOptionList)
         toolOptionFive.place(relheight = "0.06", relwidth = "0.21", relx = "0.77", rely = "0.87")
 
-        randomToolButton = tk.Button(self, text="Rand", command=None)
+        randomToolButton = tk.Button(self, text="Rand")
         randomToolButton.place(relheight="0.06", relwidth=0.05, relx="0.93", rely="0.57")
 
         self.messageLabel = tk.Label(self, relief='sunken', text='Messages')
@@ -247,19 +247,19 @@ class CreateCharacterPage(Page, Background, Name, Class, Races):
     #Places all the background feature option menu widgets
     def placeBackgroundFeatureWidgets(self):
         self.personality.set("Select an option")
-        self.personalityOption = tk.OptionMenu(self, self.personality, *self.personalityOptionList, command=None)
+        self.personalityOption = tk.OptionMenu(self, self.personality, *self.personalityOptionList)
         self.personalityOption.place(relheight="0.06", relwidth="0.25", relx="0.17", rely="0.3")
 
         self.ideal.set("Select an option")
-        self.idealOption = tk.OptionMenu(self, self.ideal, *self.idealOptionList, command=None)
+        self.idealOption = tk.OptionMenu(self, self.ideal, *self.idealOptionList)
         self.idealOption.place(relheight=0.06, relwidth="0.25", relx="0.17", rely="0.36")
 
         self.bond.set("Select an option")
-        self.bondOption = tk.OptionMenu(self, self.bond, *self.bondOptionList, command=None)
+        self.bondOption = tk.OptionMenu(self, self.bond, *self.bondOptionList)
         self.bondOption.place(relheight="0.06", relwidth="0.25", relx="0.17", rely="0.42")
 
         self.flaw.set("Select an option")
-        self.flawOption = tk.OptionMenu(self, self.flaw, *self.flawOptionList, command=None)
+        self.flawOption = tk.OptionMenu(self, self.flaw, *self.flawOptionList)
         self.flawOption.place(relheight="0.06", relwidth="0.25", relx="0.17", rely="0.48")
 
     def setLists(self):
@@ -386,7 +386,7 @@ class MainView(tk.Frame):
         buttonAddItemsAndSpellsPage = tk.Button(buttonFrame, text = "Add new items/spells", command = addItemsAndSpellsPage.lift)
         settingsButton = tk.Button(buttonFrame, image = self.settingsImage, command = settingsPage.lift)
 
-        #Places the buttons in the button fram
+        #Places the buttons in the button frame
         buttonCreateCharacterPage.pack(side = "left")
         buttonCharacterSheetPage.pack(side="left")
         buttonBattlePage.pack(side = "left")
