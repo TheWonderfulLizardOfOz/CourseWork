@@ -103,5 +103,5 @@ class RandomBackground(Background):
         return message
 
 def setup(bot):
-    #creates and instance of the RandomBackground class and makes it a cog in the discord bot
+    #creates an instance of the RandomBackground class and makes it a cog in the discord bot
     bot.add_cog(RandomBackground(bot))
