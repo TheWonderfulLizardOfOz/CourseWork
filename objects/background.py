@@ -79,10 +79,6 @@ class RandomBackground(Background):
 
         await ctx.send(self.message)
 
-    @commands.command()
-    async def fullRandomBackground(self, ctx):
-        pass
-
     def setStatementsFullRandom(self):
         self.personalityStatement = "SELECT personalityTrait.personalityTrait FROM PersonalityTrait"
         self.idealStatement = "SELECT ideal.ideal FROM ideal"
@@ -107,4 +103,5 @@ class RandomBackground(Background):
         return message
 
 def setup(bot):
+    #creates and instance of the RandomBackground class and makes it a cog in the discord bot
     bot.add_cog(RandomBackground(bot))
