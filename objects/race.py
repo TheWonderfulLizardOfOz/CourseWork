@@ -9,7 +9,7 @@ class Races(commands.Cog):
         #json.load() converts into dictionary
         self.racesDict = json.load(file)
         file.close()
-        #Creates a list of races useing list comprehension by iterating through the keys in the dictionary
+        #Creates a list of races using list comprehension by iterating through the keys in the dictionary
         self.raceList = [key for key in self.racesDict]
 
     @commands.command()
@@ -43,7 +43,7 @@ class Races(commands.Cog):
         for key, value in dict.items():
             valueOutput = ""
             #There are 2 possible data types for the values: int or list
-            #If it is an int then a "+" will be placed infront
+            #If it is an int then a "+" will be placed in front
             if type(value) is int:
                 valueOutput = "+" + str(value)
             #If it is a list then the items will be iterated through into an easier to read format for the user

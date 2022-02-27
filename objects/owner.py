@@ -10,7 +10,7 @@ class Owner(commands.Cog):
     async def load(self, ctx, arg):
         try:
             self.bot.load_extension(arg)
-        except Exception as e:
+        except Exception:
             await ctx.send("**`Error failed to load cog`**")
         else:
             await ctx.send("**`Successfully loaded cog`**")
@@ -34,7 +34,7 @@ class Owner(commands.Cog):
             self.bot.unload_extension(arg)
             self.bot.load_extension(arg)
         except:
-            await ctx.send(f"**`Error failed to relaod cof`**")
+            await ctx.send(f"**`Error failed to reload cof`**")
         else:
             await ctx.send("**`Successfully reloaded cog`**")
 

@@ -17,18 +17,28 @@ class Name(commands.Cog):
         await ctx.send(random.choice(self.namesList))
 
     @commands.command()
-    async def addName(self, ctx, arg = None):
+    async def addName(self, ctx, *args):
         #Validates the user input
-        if arg == None:
+        if len(args) == 0:
             valid = False
         else:
-            valid = self.validateNameInput(arg)
+            #Iterates through every argument to check if they are valid if one argument is found to be invalid the loop breaks
+            for arg in args:
+                valid = self.validateNameInput(arg)
+                if valid == False:
+                    break
         if valid == False:
             #Sends message to user to tell them that their input was invalid
             await ctx.send("Invalid input, can't be empty, new lines and commas cannot be used.")
         else:
             #If user input is valid name is added to file
-            self.addNameToFile(arg)
+            name = ""
+            for arg in args:
+                #Adds arg and a whitespace to have a space between words
+                name += arg + " "
+            #Removes white space on last iteration
+            name = name[0:-1]
+            self.addNameToFile(name)
             #Sends message to user to tell them that the name was added to the file
             await ctx.send("Name added")
 

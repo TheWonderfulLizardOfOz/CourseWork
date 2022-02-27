@@ -3,7 +3,7 @@ import sqlite3
 import random
 
 class Background(commands.Cog):
-    #Default value of bot is None as when called by subclass that dosn't use the discord bot won't pass a value
+    #Default value of bot is None as when called by subclass that doesn't use the discord bot won't pass a value
     def __init__(self, bot = None):
         self.bot = bot
         self.backgroundID = -1
@@ -42,7 +42,7 @@ class Background(commands.Cog):
         self.bondStatement = """SELECT bond.bond FROM bond WHERE bond.backgroundID = """ + str(self.backgroundID)
         self.flawStatement = """SELECT flaw.flaw FROM flaw WHERE flaw.backgroundID = """ + str(self.backgroundID)
 
-    #openDB and closeDB are used to save time as they condese what would be 4 lines of code into 2 when called
+    #openDB and closeDB are used to save time as they condense what would be 4 lines of code into 2 when called
     def openDB(self):
         self.db = sqlite3.connect("dndDB.db")
         self.cursor = self.db.cursor()

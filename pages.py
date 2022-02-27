@@ -23,7 +23,7 @@ class CreateCharacterPage(Page, Background, Name, Class, Races):
         Class.__init__(self)
         Races.__init__(self)
 
-        tempDefualt = tk.StringVar(self)
+        tempDefault = tk.StringVar(self)
 
         #Sets lists for option menus
         self.backgroundOptionList = [background[1] for background in self.getBackgroundList()]
@@ -182,16 +182,16 @@ class CreateCharacterPage(Page, Background, Name, Class, Races):
         languagesLabel.place(relheight = "0.06", relwidth = "0.1", relx = "0.32", rely = "0.60")
 
         self.languageOptionList = []
-        languageOptionOne = tk.OptionMenu(self, tempDefualt, None, self.languageOptionList)
+        languageOptionOne = tk.OptionMenu(self, tempDefault, None, self.languageOptionList)
         languageOptionOne.place(relheight = "0.06", relwidth = "0.15", relx = "0.32", rely = "0.66")
 
-        languageOptionTwo = tk.OptionMenu(self, tempDefualt, None, self.languageOptionList)
+        languageOptionTwo = tk.OptionMenu(self, tempDefault, None, self.languageOptionList)
         languageOptionTwo.place(relheight = "0.06", relwidth = "0.15", relx = "0.32", rely = "0.72")
 
-        languageOptionThree = tk.OptionMenu(self, tempDefualt, None, self.languageOptionList)
+        languageOptionThree = tk.OptionMenu(self, tempDefault, None, self.languageOptionList)
         languageOptionThree.place(relheight = "0.06", relwidth = "0.15", relx = "0.32", rely = "0.78")
 
-        languageOptionFour = tk.OptionMenu(self, tempDefualt, None, self.languageOptionList)
+        languageOptionFour = tk.OptionMenu(self, tempDefault, None, self.languageOptionList)
         languageOptionFour.place(relheight = "0.06", relwidth = "0.15", relx = "0.32", rely = "0.84")
 
         randomLanguageButton = tk.Button(self, text="Rand")
@@ -201,19 +201,19 @@ class CreateCharacterPage(Page, Background, Name, Class, Races):
         skillLabel.place(relheight = "0.06", relwidth = "0.16", relx = "0.53", rely = "0.57")
 
         self.skillOptionList = []
-        skillOptionOne = tk.OptionMenu(self, tempDefualt, None, self.skillOptionList)
+        skillOptionOne = tk.OptionMenu(self, tempDefault, None, self.skillOptionList)
         skillOptionOne.place(relheight = "0.06", relwidth = "0.21", relx = "0.53", rely = "0.63")
 
-        skillOptionTwo = tk.OptionMenu(self, tempDefualt, None, self.skillOptionList)
+        skillOptionTwo = tk.OptionMenu(self, tempDefault, None, self.skillOptionList)
         skillOptionTwo.place(relheight = "0.06", relwidth = "0.21", relx = "0.53", rely = "0.69")
 
-        skillOptionThree = tk.OptionMenu(self, tempDefualt, None, self.skillOptionList)
+        skillOptionThree = tk.OptionMenu(self, tempDefault, None, self.skillOptionList)
         skillOptionThree.place(relheight = "0.06", relwidth = "0.21", relx = "0.53", rely = "0.75")
 
-        skillOptionFour = tk.OptionMenu(self, tempDefualt, None, self.skillOptionList)
+        skillOptionFour = tk.OptionMenu(self, tempDefault, None, self.skillOptionList)
         skillOptionFour.place(relheight = "0.06", relwidth = "0.21", relx = "0.53", rely = "0.81")
 
-        skillOptionFive = tk.OptionMenu(self, tempDefualt, None, self.skillOptionList)
+        skillOptionFive = tk.OptionMenu(self, tempDefault, None, self.skillOptionList)
         skillOptionFive.place(relheight = "0.06", relwidth = "0.21", relx = "0.53", rely = "0.87")
 
         randomSkillButton = tk.Button(self, text="Rand")
@@ -223,19 +223,19 @@ class CreateCharacterPage(Page, Background, Name, Class, Races):
         toolLabel.place(relheight = "0.06", relwidth = "0.16", relx = "0.77", rely = "0.57")
 
         self.toolOptionList = []
-        toolOptionOne = tk.OptionMenu(self, tempDefualt, None, self.toolOptionList)
+        toolOptionOne = tk.OptionMenu(self, tempDefault, None, self.toolOptionList)
         toolOptionOne.place(relheight = "0.06", relwidth = "0.21", relx = "0.77", rely = "0.63")
 
-        toolOptionTwo = tk.OptionMenu(self, tempDefualt, None, self.toolOptionList)
+        toolOptionTwo = tk.OptionMenu(self, tempDefault, None, self.toolOptionList)
         toolOptionTwo.place(relheight = "0.06", relwidth = "0.21", relx = "0.77", rely = "0.69")
 
-        toolOptionThree = tk.OptionMenu(self, tempDefualt, None, self.toolOptionList)
+        toolOptionThree = tk.OptionMenu(self, tempDefault, None, self.toolOptionList)
         toolOptionThree.place(relheight = "0.06", relwidth = "0.21", relx = "0.77", rely = "0.75")
 
-        toolOptionFour = tk.OptionMenu(self, tempDefualt, None, self.toolOptionList)
+        toolOptionFour = tk.OptionMenu(self, tempDefault, None, self.toolOptionList)
         toolOptionFour.place(relheight = "0.06", relwidth = "0.21", relx = "0.77", rely = "0.81")
 
-        toolOptionFive = tk.OptionMenu(self, tempDefualt, None, self.toolOptionList)
+        toolOptionFive = tk.OptionMenu(self, tempDefault, None, self.toolOptionList)
         toolOptionFive.place(relheight = "0.06", relwidth = "0.21", relx = "0.77", rely = "0.87")
 
         randomToolButton = tk.Button(self, text="Rand")
@@ -299,6 +299,7 @@ class CreateCharacterPage(Page, Background, Name, Class, Races):
     #Will set the value in the attribute passed to a randomly selected option in the list passed
     def randomOption(self, optionList, featureAttribute):
         featureAttribute.set(random.choice(optionList))
+        #Checks if background was changed, if the background was changed then the feature option menus will be reset
         if featureAttribute.get() in self.backgroundOptionList:
             self.backgroundUpdated(featureAttribute.get())
 

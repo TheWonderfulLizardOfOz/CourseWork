@@ -48,12 +48,14 @@ class Class(commands.Cog):
         statement = """SELECT * FROM class WHERE class.className =  '""" + str(arg) + "'"
         self.cursor.execute(statement)
         classDetails = self.cursor.fetchall()[0]
+        #Sets a default value for tool proficiency type
         self.toolProficiencyType = None
         #If the class has a tool proficiency it collects the type of proficiency from the database
         if classDetails[4] != None:
             statement = """SELECT toolType.toolType FROM toolType WHERE toolType.toolTypeID = """ + str(classDetails[4])
             self.cursor.execute(statement)
-            self.toolProficiencyType = self.cursor.fetchall()[0]
+            #First [0] to get access to first tuple in list then second [0] to get access to first item in tuple which is the tool proficiency type
+            self.toolProficiencyType = self.cursor.fetchall()[0][0]
         self.closeDB()
 
         #Assigns all the values in the fields to attributes
@@ -72,7 +74,7 @@ class Class(commands.Cog):
         self.weaponProf = classDetails[12]
         self.weaponRangeProf = classDetails[13]
 
-        #Creates a dictionairy to make the output easier to create
+        #Creates a dictionary to make the output easier to create
         self.classDetailsDict = {"Class name": self.className, "Hit dice": "d" + str(self.hitDice),
                                  "Number of available tool proficiencies": self.noTools,
                                  "Type of tool proficiency": self.toolProficiencyType,
