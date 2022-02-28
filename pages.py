@@ -23,6 +23,9 @@ class CreateCharacterPage(Page, Background, Name, Class, Races):
         Class.__init__(self)
         Races.__init__(self)
 
+        #Sets a default value for characterID to track if a character has been created
+        self.characterID = None
+
         tempDefault = tk.StringVar(self)
 
         #Sets lists for option menus
@@ -38,7 +41,7 @@ class CreateCharacterPage(Page, Background, Name, Class, Races):
         self.bond = tk.StringVar(self)
         self.flaw = tk.StringVar(self)
         self.classChoice = tk.StringVar(self)
-        self.classChoice.set("Select and option")
+        self.classChoice.set("Select an option")
         self.race = tk.StringVar(self)
         self.race.set("Select an option")
         #Places all the background feature option menu widgets
@@ -91,8 +94,11 @@ class CreateCharacterPage(Page, Background, Name, Class, Races):
         randomImageButton = tk.Button(self, text = "Random Image")
         randomImageButton.place(relheight = "0.06", relwidth = "0.225", relx = "0.755", rely = "0.48")
 
-        saveCharacterButton = tk.Button(self, text = "Save Character")
-        saveCharacterButton.place(relheight = 0.09, relwidth = "0.16", relx = "0.31", rely = "0.03")
+        saveCharacterButton = tk.Button(self, text = "Save", command = self.saveCharacter)
+        saveCharacterButton.place(relheight = 0.09, relwidth = "0.08", relx = "0.31", rely = "0.03")
+
+        loadCharacterButton = tk.Button(self, text = "Load")
+        loadCharacterButton.place(relheight = 0.09, relwidth = 0.08, relx = 0.39, rely = 0.03)
 
         nameLabel = tk.Label(self, relief = "groove", text = "Name")
         nameLabel.place(relheight = "0.06", relwidth = "0.06", relx = "0.02", rely = "0.03")
@@ -320,6 +326,55 @@ class CreateCharacterPage(Page, Background, Name, Class, Races):
             self.messageLabel["text"] = "Name added to file"
         elif valid == False:
             self.messageLabel["text"] = "Invalid Name"
+
+    def saveCharacter(self):
+        if self.validateNameInput(self.nameEntry.get()) == False:
+            self.messageLabel["text"] = "Please enter a valid name"
+            return
+
+        #characterID does not need to be set as it is set automatically when adding a new record to  a database
+        characterName = self.nameEntry.get()
+        #race doesn't need to be set as it can be fetched using self.race.get()
+        classID = self.getID("class", "classID", self.classChoice.get(), "className")
+        #backgroundID does not need to be set as it is set everytime background is updated so there is already an attribute called self.backgroundID
+        bondID = self.getID("bond", "bondID", self.bond.get(), "bond")
+        flawID = self.getID("flaw", "flawID", self.flaw.get(), "flaw")
+        idealID = self.getID("ideal", "idealID", self.ideal.get(), "ideal")
+        personalityID = self.getID("personalityTrait", "personalityID", self.personality.get(), "personalityTrait")
+
+        self.openDB()
+        #Insets entered details into database
+        self.cursor.execute("""INSERT INTO characters(characterName, race,
+        classID, backgroundID, bondID, flawID, idealID, personalityTraitID) VALUES(?, ?, ?, ?, ?, ?, ?, ?)""",
+                       (characterName, self.race.get(), classID, self.backgroundID,
+                        bondID, flawID, idealID, personalityID))
+        self.closeDB()
+        self.resetWidgets()
+
+        self.messageLabel["text"] = "Character saved :)"
+
+    #Gets the ID of the record where the value passed is stored
+    #Used to construct SQL statments by saving time and can be reused multiple times when fetching IDs
+    def getID(self, table, idField, value, valueField):
+        statement = "SELECT " + table + "." + idField + " FROM " + table + " WHERE " + table + "." + valueField + " = '" + value + "'"
+        self.openDB()
+        self.cursor.execute(statement)
+        results = self.cursor.fetchall()
+        self.closeDB()
+
+        #If the result is empty (no record containing value) than None is returned
+        if len(results) == 0:
+            return None
+
+        return results[0][0]
+
+    #resets entry and option menu widgets
+    def resetWidgets(self):
+        self.placeBackgroundFeatureWidgets()
+        self.nameEntry.delete(0, tk.END)
+        self.race.set("Select an option")
+        self.classChoice.set("Select an option")
+        self.backgroundID = None
 
 class BattlePage(Page):
     def __init__(self, *args, **kwargs):
