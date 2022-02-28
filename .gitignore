@@ -131,3 +131,6 @@ dmypy.json
 *.env
 test.py
 dndDB-backup.db
+dndDB.db-journal
+
+.idea/
