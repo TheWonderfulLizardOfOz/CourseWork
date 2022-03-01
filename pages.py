@@ -328,8 +328,10 @@ class CreateCharacterPage(Page, Background, Name, Class, Races):
             self.messageLabel["text"] = "Invalid Name"
 
     def saveCharacter(self):
+        #Checks if name is valid before adding charaacter to databse
         if self.validateNameInput(self.nameEntry.get()) == False:
-            self.messageLabel["text"] = "Please enter a valid name"
+            #Lets the user know why there was an error
+            self.messageLabel["text"] = "Invalid name"
             return
 
         #characterID does not need to be set as it is set automatically when adding a new record to  a database
@@ -351,6 +353,7 @@ class CreateCharacterPage(Page, Background, Name, Class, Races):
         self.closeDB()
         self.resetWidgets()
 
+        #Lets the user know that the character was successfully added
         self.messageLabel["text"] = "Character saved :)"
 
     #Gets the ID of the record where the value passed is stored
