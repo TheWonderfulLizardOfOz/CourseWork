@@ -23,6 +23,9 @@ class CreateCharacterPage(Page, Background, Name, Class, Races):
         Class.__init__(self)
         Races.__init__(self)
 
+        self.openDB()
+        self.closeDB()
+
         #Sets a default value for characterID to track if a character has been created
         self.characterID = None
 
@@ -34,6 +37,7 @@ class CreateCharacterPage(Page, Background, Name, Class, Races):
         self.idealOptionList = ["Select a background first"]
         self.bondOptionList = ["Select a background first"]
         self.flawOptionList = ["Select a background first"]
+        self.setCharacterList()
 
         #Sets default values for option menus
         self.personality = tk.StringVar(self)
@@ -44,6 +48,8 @@ class CreateCharacterPage(Page, Background, Name, Class, Races):
         self.classChoice.set("Select an option")
         self.race = tk.StringVar(self)
         self.race.set("Select an option")
+        self.character = tk.StringVar(self)
+        self.character.set("Load")
         #Places all the background feature option menu widgets
         #In its own method due to multiple occasions where these widgets have to be destroyed and recreated
         #So placing in its own method saves time and space
@@ -97,8 +103,8 @@ class CreateCharacterPage(Page, Background, Name, Class, Races):
         saveCharacterButton = tk.Button(self, text = "Save", command = self.saveCharacter)
         saveCharacterButton.place(relheight = 0.09, relwidth = "0.08", relx = "0.31", rely = "0.03")
 
-        loadCharacterButton = tk.Button(self, text = "Load")
-        loadCharacterButton.place(relheight = 0.09, relwidth = 0.08, relx = 0.39, rely = 0.03)
+        self.loadCharacterOptions = tk.OptionMenu(self, self.character, *self.characterList, command = self.loadCharacter)
+        self.loadCharacterOptions.place(relheight = 0.09, relwidth = 0.08, relx = 0.39, rely = 0.03)
 
         nameLabel = tk.Label(self, relief = "groove", text = "Name")
         nameLabel.place(relheight = "0.06", relwidth = "0.06", relx = "0.02", rely = "0.03")
@@ -345,11 +351,25 @@ class CreateCharacterPage(Page, Background, Name, Class, Races):
         personalityID = self.getID("personalityTrait", "personalityID", self.personality.get(), "personalityTrait")
 
         self.openDB()
-        #Insets entered details into database
-        self.cursor.execute("""INSERT INTO characters(characterName, race,
-        classID, backgroundID, bondID, flawID, idealID, personalityTraitID) VALUES(?, ?, ?, ?, ?, ?, ?, ?)""",
-                       (characterName, self.race.get(), classID, self.backgroundID,
-                        bondID, flawID, idealID, personalityID))
+        if self.characterID == None:
+            #Insets entered details into database
+            self.cursor.execute("""INSERT INTO characters(characterName, race,
+            classID, backgroundID, bondID, flawID, idealID, personalityTraitID) VALUES(?, ?, ?, ?, ?, ?, ?, ?)""",
+                           (characterName, self.race.get(), classID, self.backgroundID,
+                            bondID, flawID, idealID, personalityID))
+            self.setCharacterList()
+            self.loadCharacterOptions.destroy()
+            self.loadCharacterOptions = tk.OptionMenu(self, self.character, *self.characterList, command=self.loadCharacter)
+            self.loadCharacterOptions.place(relheight=0.09, relwidth=0.08, relx=0.39, rely=0.03)
+
+        else:
+            sql = """UPDATE characters SET characterName = ?, race = ?, classID = ?, backgroundID = ?, bondID = ?, 
+            flawID = ?, idealID = ?, personalityTraitID = ? WHERE characterID = ?"""
+            values = (characterName, self.race.get(), classID, self.backgroundID,
+                            bondID, flawID, idealID, personalityID, self.characterID)
+            self.cursor.execute(sql, values)
+            #Resets characterID as there is there is now no current character being edited
+            self.characterID = None
         self.closeDB()
         self.resetWidgets()
 
@@ -378,6 +398,74 @@ class CreateCharacterPage(Page, Background, Name, Class, Races):
         self.race.set("Select an option")
         self.classChoice.set("Select an option")
         self.backgroundID = None
+        self.background.set("Select an option")
+
+    def setCharacterList(self, *args):
+        self.openDB()
+        self.cursor.execute("SELECT characterID, characterName FROM characters")
+        self.characterList = self.cursor.fetchall()
+        self.closeDB()
+
+    def loadCharacter(self, selection):
+        #Resets widgets so that changes the user did before pressing load dissapear
+        self.resetWidgets()
+
+        #Makes it so that the load button only says "Load" for ease of use for the user
+        self.character.set("Load")
+        #Sets a characterID so that it is used again when saving a character
+        self.characterID = selection[0]
+        statement = "SELECT * FROM characters WHERE characterID = {}".format(self.characterID)
+        self.openDB()
+        self.cursor.execute(statement)
+        #Characer details will be a tuple storing the fetched information from the database
+        #The tuple stores information from each field:
+        #(characterID, characterName, classID, bondID, flawID, idealID, personalityTraitID, classSKillOneID, classSkillTwoID, classSkillThreeID, toolOneID, toolTwoID, toolThreeID, toolFourID, languageOneID, languageTwoID, languageThreeID, race)
+        characterDetails = self.cursor.fetchall()[0]
+
+        #Resets name entry and then inserts the name from the database which is in characterDetails[1]
+        self.nameEntry.delete(0, tk.END)
+        self.nameEntry.insert(0, characterDetails[1])
+
+        #Checks if the record is not null before updating classChoice
+        if characterDetails[2] != None:
+            statement = "SELECT className FROM class WHERE classID = {}".format(characterDetails[2])
+            self.cursor.execute(statement)
+            self.classChoice.set(self.cursor.fetchall()[0][0])
+
+        #Checks if there is a background, before updating backgrounds
+        if characterDetails[3] == -1 or characterDetails[3] == None:
+            self.placeBackgroundFeatureWidgets()
+            self.background.set("Select an option")
+        else:
+            self.cursor.execute("SELECT backgroundName FROM background WHERE backgroundID = ?", (characterDetails[3],))
+            self.background.set(self.cursor.fetchall()[0])
+            self.backgroundID = characterDetails[3]
+
+            if characterDetails[4] != None:
+                statement = "SELECT bond FROM bond WHERE bondID = {}".format(characterDetails[4])
+                self.cursor.execute(statement)
+                self.bond.set(self.cursor.fetchall()[0][0])
+
+            if characterDetails[5] != None:
+                statement = "SELECT flaw FROM flaw WHERE flawID = {}".format(characterDetails[5])
+                self.cursor.execute(statement)
+                self.flaw.set(self.cursor.fetchall()[0][0])
+
+            if characterDetails[6] != None:
+                statement = "SELECT ideal FROM ideal WHERE idealID = {}".format(characterDetails[6])
+                self.cursor.execute(statement)
+                self.ideal.set(self.cursor.fetchall()[0][0])
+
+            if characterDetails[7] != None:
+                statement = "SELECT personalityTrait FROM personalityTrait WHERE personalityID = {}".format(characterDetails[7])
+                self.cursor.execute(statement)
+                self.personality.set(self.cursor.fetchall()[0][0])
+
+        if characterDetails[18] != None:
+            self.race.set(characterDetails[18])
+        else:
+            self.race.set("Select an option")
+        self.closeDB()
 
 class BattlePage(Page):
     def __init__(self, *args, **kwargs):
