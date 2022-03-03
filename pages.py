@@ -293,6 +293,7 @@ class CreateCharacterPage(Page, Background, Name, Class, Races):
             self.prevBackground = self.newBackground
 
         self.openDB()
+        #args[0] is the background name
         self.cursor.execute("""SELECT backgroundID FROM background WHERE backgroundName = ?""", [args[0]])
         self.backgroundID = self.cursor.fetchall()
         self.backgroundID = self.backgroundID[0][0]
@@ -334,7 +335,7 @@ class CreateCharacterPage(Page, Background, Name, Class, Races):
             self.messageLabel["text"] = "Invalid Name"
 
     def saveCharacter(self):
-        #Checks if name is valid before adding charaacter to databse
+        #Checks if name is valid before adding character to database
         if self.validateNameInput(self.nameEntry.get()) == False:
             #Lets the user know why there was an error
             self.messageLabel["text"] = "Invalid name"
@@ -377,7 +378,7 @@ class CreateCharacterPage(Page, Background, Name, Class, Races):
         self.messageLabel["text"] = "Character saved :)"
 
     #Gets the ID of the record where the value passed is stored
-    #Used to construct SQL statments by saving time and can be reused multiple times when fetching IDs
+    #Used to construct SQL statements by saving time and can be reused multiple times when fetching IDs
     def getID(self, table, idField, value, valueField):
         statement = "SELECT " + table + "." + idField + " FROM " + table + " WHERE " + table + "." + valueField + " = '" + value + "'"
         self.openDB()
@@ -407,16 +408,15 @@ class CreateCharacterPage(Page, Background, Name, Class, Races):
         self.closeDB()
 
     def loadCharacter(self, selection):
-        #Resets widgets so that changes the user did before pressing load dissapear
+        #Resets widgets so that changes the user did before pressing load disappear
         self.resetWidgets()
 
         #Makes it so that the load button only says "Load" for ease of use for the user
         self.character.set("Load")
         #Sets a characterID so that it is used again when saving a character
         self.characterID = selection[0]
-        statement = "SELECT * FROM characters WHERE characterID = {}".format(self.characterID)
         self.openDB()
-        self.cursor.execute(statement)
+        self.cursor.execute("SELECT * FROM characters WHERE characterID = ?", [self.characterID])
         #Characer details will be a tuple storing the fetched information from the database
         #The tuple stores information from each field:
         #(characterID, characterName, classID, bondID, flawID, idealID, personalityTraitID, classSKillOneID, classSkillTwoID, classSkillThreeID, toolOneID, toolTwoID, toolThreeID, toolFourID, languageOneID, languageTwoID, languageThreeID, race)
@@ -428,37 +428,33 @@ class CreateCharacterPage(Page, Background, Name, Class, Races):
 
         #Checks if the record is not null before updating classChoice
         if characterDetails[2] != None:
-            statement = "SELECT className FROM class WHERE classID = {}".format(characterDetails[2])
-            self.cursor.execute(statement)
+            self.cursor.execute("SELECT className FROM class WHERE classID = ?", [characterDetails[2]])
             self.classChoice.set(self.cursor.fetchall()[0][0])
 
         #Checks if there is a background, before updating backgrounds
         if characterDetails[3] == -1 or characterDetails[3] == None:
             self.placeBackgroundFeatureWidgets()
             self.background.set("Select an option")
+
         else:
-            self.cursor.execute("SELECT backgroundName FROM background WHERE backgroundID = ?", (characterDetails[3],))
-            self.background.set(self.cursor.fetchall()[0])
+            self.cursor.execute("SELECT backgroundName FROM background WHERE backgroundID = ?", [characterDetails[3]])
+            self.background.set(self.cursor.fetchall()[0][0])
             self.backgroundID = characterDetails[3]
 
             if characterDetails[4] != None:
-                statement = "SELECT bond FROM bond WHERE bondID = {}".format(characterDetails[4])
-                self.cursor.execute(statement)
+                self.cursor.execute("SELECT bond FROM bond WHERE bondID = ?", [characterDetails[4]])
                 self.bond.set(self.cursor.fetchall()[0][0])
 
             if characterDetails[5] != None:
-                statement = "SELECT flaw FROM flaw WHERE flawID = {}".format(characterDetails[5])
-                self.cursor.execute(statement)
+                self.cursor.execute("SELECT flaw FROM flaw WHERE flawID = ?", [characterDetails[5]])
                 self.flaw.set(self.cursor.fetchall()[0][0])
 
             if characterDetails[6] != None:
-                statement = "SELECT ideal FROM ideal WHERE idealID = {}".format(characterDetails[6])
-                self.cursor.execute(statement)
+                self.cursor.execute("SELECT ideal FROM ideal WHERE idealID = ?", [characterDetails[6]])
                 self.ideal.set(self.cursor.fetchall()[0][0])
 
             if characterDetails[7] != None:
-                statement = "SELECT personalityTrait FROM personalityTrait WHERE personalityID = {}".format(characterDetails[7])
-                self.cursor.execute(statement)
+                self.cursor.execute("SELECT personalityTrait FROM personalityTrait WHERE personalityID = ?", [characterDetails[7]])
                 self.personality.set(self.cursor.fetchall()[0][0])
 
         if characterDetails[18] != None:
