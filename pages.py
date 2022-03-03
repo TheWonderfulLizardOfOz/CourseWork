@@ -259,19 +259,19 @@ class CreateCharacterPage(Page, Background, Name, Class, Races):
     #Places all the background feature option menu widgets
     def placeBackgroundFeatureWidgets(self):
         self.personality.set("Select an option")
-        self.personalityOption = tk.OptionMenu(self, self.personality, *self.personalityOptionList)
+        self.personalityOption = tk.OptionMenu(self, self.personality, None, *self.personalityOptionList)
         self.personalityOption.place(relheight="0.06", relwidth="0.25", relx="0.17", rely="0.3")
 
         self.ideal.set("Select an option")
-        self.idealOption = tk.OptionMenu(self, self.ideal, *self.idealOptionList)
+        self.idealOption = tk.OptionMenu(self, self.ideal, None, *self.idealOptionList)
         self.idealOption.place(relheight=0.06, relwidth="0.25", relx="0.17", rely="0.36")
 
         self.bond.set("Select an option")
-        self.bondOption = tk.OptionMenu(self, self.bond, *self.bondOptionList)
+        self.bondOption = tk.OptionMenu(self, self.bond, None, *self.bondOptionList)
         self.bondOption.place(relheight="0.06", relwidth="0.25", relx="0.17", rely="0.42")
 
         self.flaw.set("Select an option")
-        self.flawOption = tk.OptionMenu(self, self.flaw, *self.flawOptionList)
+        self.flawOption = tk.OptionMenu(self, self.flaw, None, *self.flawOptionList)
         self.flawOption.place(relheight="0.06", relwidth="0.25", relx="0.17", rely="0.48")
 
     def setLists(self):
@@ -296,7 +296,10 @@ class CreateCharacterPage(Page, Background, Name, Class, Races):
         #args[0] is the background name
         self.cursor.execute("""SELECT backgroundID FROM background WHERE backgroundName = ?""", [args[0]])
         self.backgroundID = self.cursor.fetchall()
-        self.backgroundID = self.backgroundID[0][0]
+        if len(self.backgroundID) != 0:
+            self.backgroundID = self.backgroundID[0][0]
+        else:
+            self.backgroundID = -1
         self.closeDB()
 
         self.setStatements()
@@ -329,7 +332,7 @@ class CreateCharacterPage(Page, Background, Name, Class, Races):
             valid = False
         if valid == True:
             self.addNameToFile(name)
-            # Updates messageLabel attribute to let the user know that a name was successfully added
+            # Updates messageLabel attribute to Filet the user know that a name was successfully added
             self.messageLabel["text"] = "Name added to file"
         elif valid == False:
             self.messageLabel["text"] = "Invalid Name"
@@ -358,11 +361,11 @@ class CreateCharacterPage(Page, Background, Name, Class, Races):
             classID, backgroundID, bondID, flawID, idealID, personalityTraitID) VALUES(?, ?, ?, ?, ?, ?, ?, ?)""",
                            (characterName, self.race.get(), classID, self.backgroundID,
                             bondID, flawID, idealID, personalityID))
+            self.closeDB()
             self.setCharacterList()
             self.loadCharacterOptions.destroy()
             self.loadCharacterOptions = tk.OptionMenu(self, self.character, *self.characterList, command=self.loadCharacter)
             self.loadCharacterOptions.place(relheight=0.09, relwidth=0.08, relx=0.39, rely=0.03)
-
         else:
             sql = """UPDATE characters SET characterName = ?, race = ?, classID = ?, backgroundID = ?, bondID = ?, 
             flawID = ?, idealID = ?, personalityTraitID = ? WHERE characterID = ?"""
@@ -371,7 +374,7 @@ class CreateCharacterPage(Page, Background, Name, Class, Races):
             self.cursor.execute(sql, values)
             #Resets characterID as there is there is now no current character being edited
             self.characterID = None
-        self.closeDB()
+            self.closeDB()
         self.resetWidgets()
 
         #Lets the user know that the character was successfully added
@@ -398,7 +401,7 @@ class CreateCharacterPage(Page, Background, Name, Class, Races):
         self.nameEntry.delete(0, tk.END)
         self.race.set("Select an option")
         self.classChoice.set("Select an option")
-        self.backgroundID = None
+        self.backgroundID = -1
         self.background.set("Select an option")
 
     def setCharacterList(self, *args):
@@ -433,13 +436,24 @@ class CreateCharacterPage(Page, Background, Name, Class, Races):
 
         #Checks if there is a background, before updating backgrounds
         if characterDetails[3] == -1 or characterDetails[3] == None:
-            self.placeBackgroundFeatureWidgets()
             self.background.set("Select an option")
+            self.closeDB()
+            self.backgroundID = -1
+            self.setStatements()
+            self.setLists()
+            self.personalityOption.destroy()
+            self.idealOption.destroy()
+            self.bondOption.destroy()
+            self.flawOption.destroy()
+            self.placeBackgroundFeatureWidgets()
+            self.openDB()
 
         else:
             self.cursor.execute("SELECT backgroundName FROM background WHERE backgroundID = ?", [characterDetails[3]])
             self.background.set(self.cursor.fetchall()[0][0])
-            self.backgroundID = characterDetails[3]
+            self.closeDB()
+            self.backgroundUpdated(self.background.get())
+            self.openDB()
 
             if characterDetails[4] != None:
                 self.cursor.execute("SELECT bond FROM bond WHERE bondID = ?", [characterDetails[4]])
