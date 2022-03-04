@@ -376,6 +376,7 @@ class CreateCharacterPage(Page, Background, Name, Class, Races):
             self.characterID = None
             self.closeDB()
         self.resetWidgets()
+        self.prevBackground = None
 
         #Lets the user know that the character was successfully added
         self.messageLabel["text"] = "Character saved :)"
@@ -439,6 +440,7 @@ class CreateCharacterPage(Page, Background, Name, Class, Races):
             self.background.set("Select an option")
             self.closeDB()
             self.backgroundID = -1
+            self.prevBackground = None
             self.setStatements()
             self.setLists()
             self.personalityOption.destroy()
@@ -453,6 +455,7 @@ class CreateCharacterPage(Page, Background, Name, Class, Races):
             self.background.set(self.cursor.fetchall()[0][0])
             self.closeDB()
             self.backgroundUpdated(self.background.get())
+            self.backgroundID = characterDetails[3]
             self.openDB()
 
             if characterDetails[4] != None:
