@@ -101,7 +101,10 @@ class CreateCharacterPage(Page, Background, Name, Class, Races):
         randomImageButton.place(relheight = "0.06", relwidth = "0.225", relx = "0.755", rely = "0.48")
 
         saveCharacterButton = tk.Button(self, text = "Save", command = self.saveCharacter)
-        saveCharacterButton.place(relheight = 0.09, relwidth = "0.08", relx = "0.31", rely = "0.03")
+        saveCharacterButton.place(relheight = 0.045, relwidth = "0.08", relx = "0.31", rely = "0.03")
+
+        newCharacterButton = tk.Button(self, text = "New", command = self.newCharacter)
+        newCharacterButton.place(relheight = 0.045, relwidth = "0.08", relx = "0.31", rely = "0.075")
 
         self.loadCharacterOptions = tk.OptionMenu(self, self.character, *self.characterList, command = self.loadCharacter)
         self.loadCharacterOptions.place(relheight = 0.09, relwidth = 0.08, relx = 0.39, rely = 0.03)
@@ -362,10 +365,6 @@ class CreateCharacterPage(Page, Background, Name, Class, Races):
                            (characterName, self.race.get(), classID, self.backgroundID,
                             bondID, flawID, idealID, personalityID))
             self.closeDB()
-            self.setCharacterList()
-            self.loadCharacterOptions.destroy()
-            self.loadCharacterOptions = tk.OptionMenu(self, self.character, *self.characterList, command=self.loadCharacter)
-            self.loadCharacterOptions.place(relheight=0.09, relwidth=0.08, relx=0.39, rely=0.03)
         else:
             sql = """UPDATE characters SET characterName = ?, race = ?, classID = ?, backgroundID = ?, bondID = ?, 
             flawID = ?, idealID = ?, personalityTraitID = ? WHERE characterID = ?"""
@@ -375,6 +374,10 @@ class CreateCharacterPage(Page, Background, Name, Class, Races):
             #Resets characterID as there is there is now no current character being edited
             self.characterID = None
             self.closeDB()
+        self.setCharacterList()
+        self.loadCharacterOptions.destroy()
+        self.loadCharacterOptions = tk.OptionMenu(self, self.character, *self.characterList, command=self.loadCharacter)
+        self.loadCharacterOptions.place(relheight=0.09, relwidth=0.08, relx=0.39, rely=0.03)
         self.resetWidgets()
         self.prevBackground = None
 
@@ -398,11 +401,13 @@ class CreateCharacterPage(Page, Background, Name, Class, Races):
 
     #resets entry and option menu widgets
     def resetWidgets(self):
+        self.backgroundID = -1
+        self.setStatements()
+        self.setLists()
         self.placeBackgroundFeatureWidgets()
         self.nameEntry.delete(0, tk.END)
         self.race.set("Select an option")
         self.classChoice.set("Select an option")
-        self.backgroundID = -1
         self.background.set("Select an option")
 
     def setCharacterList(self, *args):
@@ -479,6 +484,11 @@ class CreateCharacterPage(Page, Background, Name, Class, Races):
         else:
             self.race.set("Select an option")
         self.closeDB()
+
+    def newCharacter(self):
+        self.resetWidgets()
+        self.prevBackground = None
+        self.characterID = None
 
 class BattlePage(Page):
     def __init__(self, *args, **kwargs):
