@@ -50,6 +50,8 @@ class CreateCharacterPage(Page, Background, Name, Class, Races):
         self.race.set("Select an option")
         self.character = tk.StringVar(self)
         self.character.set("Load")
+        self.deleteText = tk.StringVar(self)
+        self.deleteText.set("Delete")
         #Places all the background feature option menu widgets
         #In its own method due to multiple occasions where these widgets have to be destroyed and recreated
         #So placing in its own method saves time and space
@@ -107,7 +109,10 @@ class CreateCharacterPage(Page, Background, Name, Class, Races):
         newCharacterButton.place(relheight = 0.045, relwidth = "0.08", relx = "0.31", rely = "0.075")
 
         self.loadCharacterOptions = tk.OptionMenu(self, self.character, *self.characterList, command = self.loadCharacter)
-        self.loadCharacterOptions.place(relheight = 0.09, relwidth = 0.08, relx = 0.39, rely = 0.03)
+        self.loadCharacterOptions.place(relheight = 0.045, relwidth = 0.08, relx = 0.39, rely = 0.03)
+
+        self.deleteOptions = tk. OptionMenu(self, self.deleteText, *self.characterList, command = self.deleteCharacter)
+        self.deleteOptions.place(relheight = 0.045, relwidth = 0.08, relx = 0.39, rely = 0.075)
 
         nameLabel = tk.Label(self, relief = "groove", text = "Name")
         nameLabel.place(relheight = "0.06", relwidth = "0.06", relx = "0.02", rely = "0.03")
@@ -374,10 +379,7 @@ class CreateCharacterPage(Page, Background, Name, Class, Races):
             #Resets characterID as there is there is now no current character being edited
             self.characterID = None
             self.closeDB()
-        self.setCharacterList()
-        self.loadCharacterOptions.destroy()
-        self.loadCharacterOptions = tk.OptionMenu(self, self.character, *self.characterList, command=self.loadCharacter)
-        self.loadCharacterOptions.place(relheight=0.09, relwidth=0.08, relx=0.39, rely=0.03)
+        self.placeLoadAndDelete()
         self.resetWidgets()
         self.prevBackground = None
 
@@ -489,6 +491,33 @@ class CreateCharacterPage(Page, Background, Name, Class, Races):
         self.resetWidgets()
         self.prevBackground = None
         self.characterID = None
+
+    def deleteCharacter(self, *args):
+        self.openDB()
+        self.cursor.execute("DELETE FROM characters WHERE characterID = ?", (args[0][0],))
+        self.closeDB()
+
+        if args[0][0] == self.characterID:
+            self.characterID = None
+            self.newCharacter()
+
+        self.placeLoadAndDelete()
+        self.messageLabel["text"] ="Character deleted :("
+
+    def placeLoadAndDelete(self):
+        self.setCharacterList()
+
+        self.character.set("Load")
+        self.deleteText.set("Delete")
+
+        self.loadCharacterOptions.destroy()
+        self.deleteOptions.destroy()
+
+        self.loadCharacterOptions = tk.OptionMenu(self, self.character, *self.characterList, command=self.loadCharacter)
+        self.loadCharacterOptions.place(relheight=0.045, relwidth=0.08, relx=0.39, rely=0.03)
+
+        self.deleteOptions = tk.OptionMenu(self, self.deleteText, *self.characterList, command=self.deleteCharacter)
+        self.deleteOptions.place(relheight=0.045, relwidth=0.08, relx=0.39, rely=0.075)
 
 class BattlePage(Page):
     def __init__(self, *args, **kwargs):
