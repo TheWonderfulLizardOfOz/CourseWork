@@ -379,7 +379,10 @@ class CreateCharacterPage(Page, Background, Name, Class, Races):
             #Resets characterID as there is there is now no current character being edited
             self.characterID = None
             self.closeDB()
+
+        #Resets the delete and load option menus so that relevant lists of characters can appear
         self.placeLoadAndDelete()
+        #Resets the input widgets so that they are all cleared
         self.resetWidgets()
         self.prevBackground = None
 
@@ -457,6 +460,7 @@ class CreateCharacterPage(Page, Background, Name, Class, Races):
             self.placeBackgroundFeatureWidgets()
             self.openDB()
 
+        #Checks if there is a background
         else:
             self.cursor.execute("SELECT backgroundName FROM background WHERE backgroundID = ?", [characterDetails[3]])
             self.background.set(self.cursor.fetchall()[0][0])
@@ -465,6 +469,7 @@ class CreateCharacterPage(Page, Background, Name, Class, Races):
             self.backgroundID = characterDetails[3]
             self.openDB()
 
+            #Background features in nested if statements so that they aren't run if there is no background as it would save time in that case
             if characterDetails[4] != None:
                 self.cursor.execute("SELECT bond FROM bond WHERE bondID = ?", [characterDetails[4]])
                 self.bond.set(self.cursor.fetchall()[0][0])
@@ -487,36 +492,44 @@ class CreateCharacterPage(Page, Background, Name, Class, Races):
             self.race.set("Select an option")
         self.closeDB()
 
+    #Called when the new button is pressed, used to reset everything to what the GUI would look like when initially opened
     def newCharacter(self):
         self.resetWidgets()
         self.prevBackground = None
         self.characterID = None
 
     def deleteCharacter(self, *args):
+        #Deletes record from database with the characterID of the selected option
         self.openDB()
         self.cursor.execute("DELETE FROM characters WHERE characterID = ?", (args[0][0],))
         self.closeDB()
 
+        #Checks id the last loaded character is the same as the one being deleted, if they are it resets the input widgets
         if args[0][0] == self.characterID:
             self.characterID = None
             self.newCharacter()
 
+        #Calls a method to reset the load and delete option menus to avoid the user trying to load or delete a character that has already been deleted
         self.placeLoadAndDelete()
         self.messageLabel["text"] ="Character deleted :("
 
+    #Method used to reset the load and delete option menus when the characterList attribute needs to be updated due to a new character being added or another being deleted
     def placeLoadAndDelete(self):
         self.setCharacterList()
 
+        #Sets the text in the option menus
         self.character.set("Load")
         self.deleteText.set("Delete")
 
+        #Destroys them as when placing another one they will be placed on top so it avoids the widget being duplicated
         self.loadCharacterOptions.destroy()
         self.deleteOptions.destroy()
 
-        self.loadCharacterOptions = tk.OptionMenu(self, self.character, *self.characterList, command=self.loadCharacter)
+        #Places the widgets
+        self.loadCharacterOptions = tk.OptionMenu(self, self.character, *self.characterList, command = self.loadCharacter)
         self.loadCharacterOptions.place(relheight=0.045, relwidth=0.08, relx=0.39, rely=0.03)
 
-        self.deleteOptions = tk.OptionMenu(self, self.deleteText, *self.characterList, command=self.deleteCharacter)
+        self.deleteOptions = tk.OptionMenu(self, self.deleteText, *self.characterList, command = self.deleteCharacter)
         self.deleteOptions.place(relheight=0.045, relwidth=0.08, relx=0.39, rely=0.075)
 
 class BattlePage(Page):
