@@ -79,12 +79,6 @@ class RandomBackground(Background):
 
         await ctx.send(self.message)
 
-    def setStatementsFullRandom(self):
-        self.personalityStatement = "SELECT personalityTrait.personalityTrait FROM PersonalityTrait"
-        self.idealStatement = "SELECT ideal.ideal FROM ideal"
-        self.bondStatement = "SELECT bond.bond FROM bond"
-        self.flawStatement = "SELECT flaw.flaw FROM flaw"
-
     def setBackground(self, backgroundList):
         (self.backgroundID, self.background, self.languagesNo) = random.choice(backgroundList)
 
